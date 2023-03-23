@@ -159,7 +159,7 @@ FDM（Frequency Division Multiplexing）和 TDM（Time Division Multiplexing）�
   >
   > In this telephone network, if someone wished to make a call, a signal was sent across the connection to request the line. Each telephone switch would then select the appropriate route and reserve（预先，预定） capacity（容量） on the line and send the request on.
   >
-  > ![Six switches connecting one telephone to another to show the different routes a data packet or analogue signal can take.](01-introduction.assets/isaac_cs_net_internet_circuit_switching.png)
+  > ![Six switches connecting one telephone to another to show the different routes a data packet or analogue signal can take.](./01-introduction.assets/isaac_cs_net_internet_circuit_switching.png)
 
 简单的说，概念上两者的区别：
 
@@ -183,7 +183,7 @@ FDM（Frequency Division Multiplexing）和 TDM（Time Division Multiplexing）�
 - Content provider network (e.g., Google, Microsoft, Akamai) may run their own network, to bring services, content close to end users.
 - Network of networks is very complex.
 
-![image-20230309163439016](01-introduction.assets/image-20230309163439016.png)
+![image-20230309163439016](./01-introduction.assets/image-20230309163439016.png)
 
 ## Delay, loss, throughput in networks
 
@@ -199,7 +199,7 @@ FDM（Frequency Division Multiplexing）和 TDM（Time Division Multiplexing）�
 >
 > The time taken to transmit a packet from the host to the transmission medium is called Transmission delay.
 >
-> ![transmission-delay](01-introduction.assets/picture218.png)
+> ![transmission-delay](./01-introduction.assets/picture218.png)
 >
 > Let $B$ bps is the bandwidth and $L$ bit is the size of the data then transmission delay is,
 >
@@ -222,7 +222,7 @@ FDM（Frequency Division Multiplexing）和 TDM（Time Division Multiplexing）�
 >
 > After the packet is transmitted to the transmission medium, it has to go through the medium to reach the destination. Hence the time taken by the last bit of the packet to reach the destination is called propagation delay.
 >
-> ![propagation-delay](01-introduction.assets/Picture37.png)
+> ![propagation-delay](./01-introduction.assets/Picture37.png)
 >
 > Factors affecting propagation delay:
 >
@@ -291,7 +291,7 @@ Rate (bits/time unit) at which bits transferred between sender/receiver
 - instantaneous(瞬时): rate at given point in time
 - average(平均): rate over longer period of time
 
-![image-20230309172555842](01-introduction.assets/image-20230309172555842.png)
+![image-20230309172555842](./01-introduction.assets/image-20230309172555842.png)
 
 Link on end-end path that constrains(约束) end-end throughput.
 
@@ -301,7 +301,7 @@ Link on end-end path that constrains(约束) end-end throughput.
 >
 > **Packet loss, latency(延迟), and jitter(抖动) are all related to slow throughput speed**. Latency is the amount of time it takes for a packet to make it from source to destination, and jitter refers to the difference in packet delay. Minimizing all these factors is critical to increasing throughput speed and data performance.
 >
-> ![Bandwidth vs. Throughput](01-introduction.assets/Bandwidth-vs.-Throughput-1024x535.jpg)
+> ![Bandwidth vs. Throughput](./01-introduction.assets/Bandwidth-vs.-Throughput-1024x535.jpg)
 >
 > **You can think of bandwidth as a tube and data throughput as sand**. If you have a large tube, you can pour more sand through it at a faster rate. Conversely, if you try to put a lot of sand through a small tube, it will go very slowly.
 
@@ -315,11 +315,11 @@ OSI 是 Open System Interconnect 的缩写，意为开放式系统互联。
 
 7 层是指 OSI 七层协议模型，主要是：应用层（Application）、表示层（Presentation）、会话层（Session）、传输层（Transport）、网络层（Network）、数据链路层（Data Link）、物理层（Physical）。
 
-最后3层也被统称为应用程序层。
+最后 3 层也被统称为应用程序层。
 
 > [OSI 七层模型详解 小鹏\_加油的博客](https://blog.csdn.net/yaopeng_2005/article/details/7064869)
 >
-> ![img](01-introduction.assets/2021010409370574.jpg)
+> ![img](./01-introduction.assets/2021010409370574.jpg)
 >
 > #### 物理层
 >
@@ -407,11 +407,11 @@ OSI 是 Open System Interconnect 的缩写，意为开放式系统互联。
 
 ### Encapsulation
 
-![image-20230309182340531](01-introduction.assets/image-20230309182340531.png)
+![image-20230309182340531](./01-introduction.assets/image-20230309182340531.png)
 
 从上往下，每经过一层，协议就会在数据包包头上面做点手脚，加点东西，传送到接收端，再层层解 套出来，如下示意图：
 
-![image-20230312165352022](01-introduction.assets/image-20230312165352022.png)
+![image-20230312165352022](./01-introduction.assets/image-20230312165352022.png)
 
 ## Networks under attack: security
 
@@ -419,27 +419,27 @@ OSI 是 Open System Interconnect 的缩写，意为开放式系统互联。
 
 malware：恶意软件，指电脑病毒等
 
-- virus: self-replicating(自我复制) infection(感染) by receiving/executing(执行)  object (e.g., e-mail attachment)
+- virus: self-replicating(自我复制) infection(感染) by receiving/executing(执行) object (e.g., e-mail attachment)
 - worm: self-replicating infection by passively(被动地) receiving object that gets itself executed
 
 ### Attack server, network infrastructure
 
 Denial of Service (DoS，拒绝服务): attackers make resources (server, bandwidth) unavailable to legitimate traffic by overwhelming resource with bogus traffic.
 
-造成DoS 的攻击行为被称为DoS攻击，将大量的非法申请封包传送给指定的目标主机，其目的是完全消耗目标主机资源，使计算机或网络无法提供正常的服务。
+造成 DoS 的攻击行为被称为 DoS 攻击，将大量的非法申请封包传送给指定的目标主机，其目的是完全消耗目标主机资源，使计算机或网络无法提供正常的服务。
 
 ## History
 
 ### 计算机网络的发展阶段
 
 - 第一代：远程终端连接
-  20世纪60年代早期
+  20 世纪 60 年代早期
 
   > 面向终端的计算机网络：主机是网络的中心和控制者，终端（键盘和显示器）分布在各处并与主机相连，用户通过本地的终端使用远程的主机。
   > 只提供终端和主机之间的通信，子网之间无法通信。
 
 - 第二代：计算机网络阶段（局域网）
-  20世纪60年代中期
+  20 世纪 60 年代中期
 
   > 多个主机互联，实现计算机和计算机之间的通信。
   > 包括：通信子网、用户资源子网。
@@ -447,12 +447,12 @@ Denial of Service (DoS，拒绝服务): attackers make resources (server, bandwi
   > 电路交换和分组交换。
 
 - 第三代：计算机网络互联阶段（广域网、Internet）
-  1981年国际标准化组织(ISO)制订：开放体系互联基本参考模型（OSI/RM），实现不同厂家生产的计算机之间实现互连。
+  1981 年国际标准化组织(ISO)制订：开放体系互联基本参考模型（OSI/RM），实现不同厂家生产的计算机之间实现互连。
 
-  > TCP/IP协议的诞生。
+  > TCP/IP 协议的诞生。
 
 - 第四代：信息高速公路（高速，多业务，大数据量）
 
   > 宽带综合业务数字网：信息高速公路
-  > ATM技术、ISDN、千兆以太网
+  > ATM 技术、ISDN、千兆以太网
   > 交互性：网上电视点播、电视会议、可视电话、网上购物、网上银行、网络图书馆等高速、可视化。

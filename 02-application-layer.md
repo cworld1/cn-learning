@@ -1,4 +1,4 @@
-# Application Layer
+# Chapter 2: Application Layer
 
 ## Overview
 
@@ -44,7 +44,7 @@ clients:
 - may have dynamic IP addresses(动态 IP)
 - do not communicate directly with each other
 
-![image-20230316170707030](02-Application Layer.assets/image-20230316170707030.png)
+![image-20230316170707030](./02-application-layer.assets/image-20230316170707030.png)
 
 ### P2P architecture
 
@@ -56,7 +56,7 @@ clients:
 - peers are intermittently(间歇性) connected and change IP addresses
 - complex(复杂的) management
 
-![image-20230316180046303](02-Application Layer.assets/image-20230316180046303.png)
+![image-20230316180046303](./02-application-layer.assets/image-20230316180046303.png)
 
 ### Processes communicating
 
@@ -548,12 +548,11 @@ IMAP 是另一种用于接收电子邮件的协议，它与 POP3 不同的是，
 >
 > DNS 系统的分布式数据结构：
 >
-> ![img](02-Application Layer.assets/v2-1455270ae0d753856037a9e432a8f79b_b.jpg)
->
+> ![img](./02-application-layer.assets/v2-1455270ae0d753856037a9e432a8f79b_b.jpg)
 
 ### DNS 相关服务器及实现
 
-> [什么是 DNS_DNS 如何工作_权威性 DNS 服务器 | Cloudflare 中国官网 | Cloudflare](https://www.cloudflare.com/zh-cn/learning/dns/what-is-dns/)
+> [什么是 DNS*DNS 如何工作*权威性 DNS 服务器 | Cloudflare 中国官网 | Cloudflare](https://www.cloudflare.com/zh-cn/learning/dns/what-is-dns/)
 >
 > ### 加载网页涉及 4 个 DNS 服务器
 >
@@ -570,13 +569,13 @@ IMAP 是另一种用于接收电子邮件的协议，它与 POP3 不同的是，
 >
 > 递归解析器是一种计算机，其响应来自客户端的递归请求并花时间追踪 [DNS 记录](https://www.cloudflare.com/learning/dns/dns-records/)。为执行此操作，其发出一系列请求，直至到达用于所请求的记录的权威性 DNS 域名服务器为止（或者超时，或者如果未找到记录，则返回错误）。幸运的是，递归 DNS 解析器并不总是需要发出多个请求才能追踪响应客户端所需的记录；[缓存](https://www.cloudflare.com/learning/cdn/what-is-caching/)是一种数据持久性过程，可通过在 DNS 查找中更早地服务于所请求的资源记录来为所需的请求提供捷径。
 >
-> ![DNS 记录请求序列 - DNS 递归解析器从客户端获取请求](02-Application Layer.assets/dns_record_request_sequence_recursive_resolver.png)
+> ![DNS 记录请求序列 - DNS 递归解析器从客户端获取请求](./02-application-layer.assets/dns_record_request_sequence_recursive_resolver.png)
 >
 > #### 权威性 DNS 服务器
 >
 > 简言之，权威性 DNS 服务器是实际持有并负责 DNS 资源记录的服务器。这是位于 DNS 查找链底部的服务器，其将使用所查询的资源记录进行响应，从而最终允许发出请求的 Web 浏览器达到访问网站或其他 Web 资源所需的 IP 地址。权威性域名服务器从自身数据满足查询需求，无需查询其他来源，因为这是某些 DNS 记录的最终真实来源。
 >
-> ![DNS 记录请求序列 - DNS 查询到达 cloudflare.com 的权威性域名服务器](02-Application Layer.assets/dns_record_request_sequence_authoritative_nameserver.png)
+> ![DNS 记录请求序列 - DNS 查询到达 cloudflare.com 的权威性域名服务器](./02-application-layer.assets/dns_record_request_sequence_authoritative_nameserver.png)
 >
 > ### DNS 查找的 8 个步骤
 >
@@ -593,7 +592,7 @@ IMAP 是另一种用于接收电子邮件的协议，它与 POP3 不同的是，
 > 10. 浏览器向该 IP 地址发出[HTTP](https://www.cloudflare.com/learning/ddos/glossary/hypertext-transfer-protocol-http/) 请求。
 > 11. 位于该 IP 的服务器返回将在浏览器中呈现的网页（第 10 步）。
 >
-> ![完整的 DNS 查询和网页查询 - 10 个步骤](02-Application Layer.assets/what_is_a_dns_server_dns_lookup.png)
+> ![完整的 DNS 查询和网页查询 - 10 个步骤](./02-application-layer.assets/what_is_a_dns_server_dns_lookup.png)
 >
 > ### 什么是 DNS 高速缓存？DNS 高速缓存发生在哪里？
 >
@@ -642,4 +641,3 @@ IMAP 是另一种用于接收电子邮件的协议，它与 POP3 不同的是，
 - no always-on server
 - arbitrary(任意的) end systems directly communicate(直接通信)
 - peers(原叫同龄人，这里指对等端) are intermittently connected and change IP addresses
-
