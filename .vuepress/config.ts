@@ -29,9 +29,12 @@ export default defineUserConfig({
     navbar: [
       { text: "Home", link: "/" },
       { text: "Intro", link: "/intro.md" },
+      { text: "Blog", link: "https://blog.cworld.top" },
     ],
     // 侧边栏
     sidebar: navConfig,
     sidebarDepth: 1,
   }),
+  // plugins config
+  plugins: [],
 });

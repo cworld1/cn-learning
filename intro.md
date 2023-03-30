@@ -2,9 +2,7 @@
 
 [![GitHub stars](https://img.shields.io/github/stars/cworld1/cn-learning?style=flat-square)](https://github.com/cworld1/cn-learning/stargazers)
 [![GitHub commit activity](https://img.shields.io/github/commit-activity/y/cworld1/cn-learning?label=commits&style=flat-square)](https://github.com/cworld1/cn-learning/commits)
-
-<!-- [![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/cworld1/cn-learning/.github/workflows/docs-build.yml?branch=main&style=flat-square)](https://github.com/cworld1/cn-learning/actions/workflows/docs-build.yml) -->
-
+[![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/cworld1/cn-learning/.github/workflows/build-deploy.yml?branch=main&style=flat-square)](https://github.com/cworld1/cn-learning/actions/workflows/build-deploy.yml)
 [![GitHub license](https://img.shields.io/github/license/cworld1/cn-learning?style=flat-square)](https://github.com/cworld1/cn-learning/blob/main/LICENSE)
 
 Some notes and code about CWorld learning Computer Network.
