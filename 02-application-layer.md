@@ -641,3 +641,307 @@ IMAP 是另一种用于接收电子邮件的协议，它与 POP3 不同的是，
 - no always-on server
 - arbitrary(任意的) end systems directly communicate(直接通信)
 - peers(原叫同龄人，这里指对等端) are intermittently connected and change IP addresses
+
+## Video streaming and content distribution networks (CDNs)（不重要）
+
+### Video traffic
+
+Video traffic: major consumer of Internet bandwidth
+
+solution: distributed, application-level infrastructure(分布式应用程序级基础架构)
+
+- CBR（恒定比特率）是指视频编码时采用固定的比特率来保证视频的一致性和稳定性，不论视频场景中的运动、细节、色彩变化等情况如何。因此，CBR 编码方式适用于要求视频画质和大小都相同的场合，比如直播、视频会议等。
+
+- VBR（可变比特率）是指视频编码时采用动态的比特率来实现更高的压缩效率和更好的视觉质量，它根据不同的场景自适应地改变编码比特率，达到了优化视频质量和压缩比的平衡。因此，VBR 编码方式适用于对视频质量要求高，但视频大小不是首要考虑因素的场合，比如电影、高清视频等。
+
+如：
+
+- MPEG 1 (CD-ROM) 1.5 Mbps
+- MPEG 2 (DVD) 3-6 Mbps
+- MPEG 4 (often used in Internet, < 1 Mbps)
+
+### Streaming multimedia: DASH
+
+DASH（Dynamic, Adaptive Streaming over HTTP）即动态自适应流式传输协议，是一种通过互联网以 HTTP 协议传输音视频内容的方法。DASH 协议允许在不同的网络环境下自动调整音视频的码率和分辨率，以保证用户可以获得最佳的观看体验。简而言之，DASH 协议可以根据用户的网络环境和设备性能自动选择最适合的视频质量，以确保视频的流畅播放和高质量观看。
+
+### CDN
+
+CDN(Content Distribution Networks) 即内容分发网络，是一种在网络边缘部署节点的技术，通过靠近用户的部署位置，提高用户访问网站内容的速度和质量。以下是 CDN 的相关知识点：
+
+1. CDN 的工作原理：CDN 通过将原始服务器上的内容缓存到分布在全球各地的服务器节点上，使用户请求能够从离用户最近的服务器节点获取内容，从而提高用户访问速度和性能。
+
+2. CDN 的好处：CDN 可以帮助网站提高用户访问速度、减少带宽成本、提高网站的可用性、减轻服务器负载等。
+
+3. CDN 的部署方式：CDN 可以采用两种部署方式，即自建 CDN 和使用第三方 CDN。自建 CDN 需要投入大量的资金和技术力量，而使用第三方 CDN 的成本较低，但需要考虑接入成本和服务质量等问题。
+
+4. CDN 的缓存方式：CDN 缓存方式可以分为边缘缓存和中心缓存两种。边缘缓存是将内容缓存到离用户最近的服务器节点上，中心缓存是将内容缓存到核心节点上，然后由核心节点向各个边缘节点分发。
+
+5. CDN 的工作流程：CDN 的工作流程可以分为 DNS 解析、请求路由、内容缓存和内容传输四个阶段。DNS 解析负责将用户请求路由到最佳的 CDN 节点，请求路由将请求分发到最近的边缘节点上，内容缓存负责将内容存储到缓存中，内容传输将缓存内容传输给用户。
+
+## Socket programming with UDP and TCP
+
+### Socket programming
+
+Goal: learn how to build client/server applications that communicate using sockets.
+
+Two socket types for two transport services:
+
+- UDP: unreliable datagram(数据报文，数据包)
+- TCP: reliable, byte stream-oriented(以流为导向)
+
+> [Building TCP and UDP Client-Server Interactions | by Matthew MacFarquhar | Dev Genius](https://blog.devgenius.io/building-tcp-and-udp-client-server-interactions-eb8228644da2)
+>
+> ![1_bjlwOQvdSYGktTtPuGVldQ](./02-application-layer.assets/1_bjlwOQvdSYGktTtPuGVldQ.webp)
+>
+> This photo is a great visual representation of what is going on between the server and the client. In a Connection-oriented system, the server and client send these SYN, SYN-ACK and ACK messages to ensure the packet is successfully received, if this pattern(模式) is broken (i.e. one of these is not sent) then the packet can be re-sent.
+
+### UDP 与 TCP 比较
+
+> [Python 绝技 —— UDP 服务器与客户端 - i 春秋 - 博客园 (cnblogs.com)](https://www.cnblogs.com/ichunqiu/p/9200723.html)
+>
+> 为了更直观地比较 TCP 与 UDP 的异同，笔者将其整理成以下表格：
+>
+> |                  | TCP                     | UDP                   |
+> | ---------------- | ----------------------- | --------------------- |
+> | 连接模式         | 面向连接（单点通信）    | 无连接（多点通信）    |
+> | 传输可靠性       | 可靠                    | 不可靠                |
+> | 通信模式         | 基于字节流              | 基于数据报            |
+> | 报头结构         | 复杂（至少 20 字节）    | 简单（8 字节）        |
+> | 传输速度         | 慢                      | 快                    |
+> | 资源需求         | 多                      | 少                    |
+> | 到达顺序         | 保证                    | 不保证                |
+> | 流量控制         | 有                      | 无                    |
+> | 拥塞控制         | 有                      | 无                    |
+> | 应用场合         | 大量数据传输            | 少量数据传输          |
+> | 支持的应用层协议 | Telnet、FTP、SMTP、HTTP | DNS、DHCP、TFTP、SNMP |
+
+### Client/server socket: UDP
+
+Properties of UDP:
+
+> [UDP - Client and Server example programs in Python | Pythontic.com](https://pythontic.com/modules/socket/udp-client-server-example)
+>
+> - The UDP does not provide guaranteed(放心的，可靠的) delivery of message packets. If for some issue in a network if a packet is lost it could be lost **forever**.
+> - Since there is no guarantee of assured(有把握的) delivery of messages, UDP is considered an unreliable protocol.
+> - The underlying mechanisms(底层机制) that implement(实现) UDP involve **no connection-based communication**. There is no streaming of data between a UDP server or and an UDP Client.
+> - An UDP client can send "n" number of distinct packets to an UDP server and it could also receive "n" number of distinct packets as replies from the UDP server.
+> - Since UDP is connectionless protocol the overhead(负载，开销) involved in UDP is **less** compared to a connection based protocol like TCP.
+>
+> ![UDP Client Server Communication](./02-application-layer.assets/udp-client-server.png)
+
+UDP 具体实现：
+
+> [【Python】UDP/TCP\_种花家 de 小红帽的博客-CSDN 博客](https://blog.csdn.net/phoenixFlyzzz/article/details/129790340)
+>
+> 面向无连接型：无需对端是否存在，发送端可随时发送数据
+>
+> 特点：无连接，资源开销小，传输速度快，每个数据包最大是 64k，适用于广播应用
+>
+> 缺陷：传输数据不可靠，容易丢包；没有流量控制，需要接收方及时接收数据，否则会写满缓冲区
+>
+> ### UDP 网络流程
+>
+> ![img](./02-application-layer.assets/7faef4a58ca97097d08c543ca6a8e9fc.png)
+>
+> 1. 保证 UPD 服务端的正常启动，进入到 recvfrom() 模式，阻塞等到客户端发送数据
+> 2. 开启 UDP 客户端，校准 IP 地址，通过 sendto() 模块进行数据发送
+> 3. 当服务端接收到接收到客户端发送来的数据，进行数据处理，并将应答数据发送给客户端
+> 4. 客户端接收到应答数据，可进行数据处理或重复发送数据，也可退出进程
+>
+> ### serve 服务端
+>
+> ```python
+> # coding=utf-8
+> from socket import *
+>
+> # 1. 创建套接字
+> udp_socket = socket(AF_INET, SOCK_DGRAM)
+>
+> # 2. 绑定本地的相关信息，如果一个网络程序不绑定，系统会随机分配
+> #    ip地址和端口号，如果不指明ip，则表示本机的任何一个ip
+> #    如果不指明端口号，则每次启动都是随机生成端口号
+> local_addr = ('', 12345)
+> udp_socket.bind(local_addr)
+>
+> while True:
+>     # 3. 阻塞等待接收对方发送的信息
+>     #    1024表示本次接收的最大字节数
+>     recv_data = udp_socket.recvfrom(1024)
+>
+>     # 4. 显示接收到的数据，并解码为gbk
+>     print(recv_data)
+>     print(recv_data[0].decode('utf-8'))
+>
+>     # 5. 发送应答信息
+>     # ip_addr = recv_data[1][0]
+>     # port = recv_data[1][1]
+>     addr = recv_data[1]
+>     data = '信息已收到'
+>     udp_socket.sendto(data.encode('utf-8'), addr)
+>
+> udp_socket.close()
+> ```
+>
+> ### client 客户端
+>
+> ```python
+> import socket
+>
+> # 1. 创建upd套接字
+> udp_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+>
+> # 2. 准备服务端地址与端口号
+> #   127.0.0.1 代表自身ip地址，可向自身发送信息，也可指定ip地址发送信息
+> #   端口号随便填写一个未被占用的端口即可
+> #   Linux环境有65535个端口号，前1024个端口号是系统端口号，系统端口号不能直接使用
+> addr = ('127.0.0.1', 12345)
+>
+> while True:
+>     # 3. 从键盘获取数据
+>     data = input('请输入信息：')
+>
+>     # 4. 通过sendto()发送信息到指定进程中
+>     udp_socket.sendto(data.encode('utf-8'), addr)
+>
+>     # 5. 通过recvfrom()阻塞等待获取应答数据
+>     recv_data = udp_socket.recvfrom(1024)
+>
+>     # 6. 处理应答数据，进行打印
+>     print(recv_data)
+>     print(recv_data[0].decode('utf-8'))
+>
+> udp_socket.close()
+> ```
+>
+> 运行结果：（先运行服务端，再运行客户端）
+>
+> ![img](./02-application-layer.assets/2c25303f3be41dbd0bea218be3e2cf76.png)
+
+### Client/server socket: TCP
+
+> [【Python】UDP/TCP\_种花家 de 小红帽的博客-CSDN 博客](https://blog.csdn.net/phoenixFlyzzz/article/details/129790340)
+>
+> 面向有连接型：双方先建立连接才能进行数据传输
+>
+> 特点：
+>
+> - 双方都必须为该连接分配系统内核资源
+>
+> - 完成数据交换后，双方必须断开连接，以释放系统资源
+>
+> - 这种连接是一对一的，不适用于广播应用
+>
+> - TCP 提供可靠的数据传输，无差别、不丢失、不重复，且按序到达
+>
+> - 相比于 UPD，TCP 数据传输速度慢、对系统资源要求较高
+>
+> - TCP 适合发送大量数据，UDP 适合发送少量数据
+>
+> - TCP 有流量控制，UPD 无流量控制
+>
+> ### TCP 网络流程
+>
+> ![img](./02-application-layer.assets/7e3ab650d5f1ee24023bc55e37a4a29a.png)
+>
+> ### serve 服务端
+>
+> ```python
+> from socket import *
+> 
+> # 1. 创建tcp套接字
+> tcp_serve_socket = socket(AF_INET, SOCK_STREAM)
+> 
+> # 2. 设置socket选项，程序退出后，端口会自动释放
+> tcp_serve_socket.setsockopt(SOL_SOCKET, SO_REUSEADDR, True)
+> 
+> # 3. 本地信息，第二个为端口
+> addr = ('', 12345)
+> 
+> # 4. 绑定地址
+> tcp_serve_socket.bind(addr)
+> 
+> # 5. 设置监听
+> #    使用socket创建的套接字默认的属性是主动的，使用listen将其变为被动的
+> #    参数代表等待连接时间最多60秒
+> tcp_serve_socket.listen(60)
+> 
+> # 6. 如果有新的客户端来连接服务，就产生一个新的套接字，专门为这个客户端服务
+> #    client_socket用来为这个客户端服务
+> #    原来的tcp_serve_socket就可以专门用来等待其他新用户的连接
+> client_socket, client_addr = tcp_serve_socket.accept()
+> 
+> # 7. 阻塞等待客户端发送的信息
+> recv_data = client_socket.recv(1024)
+> print("接收到信息：", recv_data.decode('gbk'))
+> 
+> # 8. 发送应答信息
+> string = '已收到信息'
+> client_socket.send(string.encode('gbk'))
+> 
+> client_socket.close()
+> ```
+>
+> ## client 客户端
+>
+> ```python
+> import socket
+> 
+> # 1. 创建TCP的套接字
+> tcp_client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+> 
+> # 2. 目标ip信息
+> ip = input('请输入服务端ip：')
+> port = int(input('请输入服务端port：'))
+> 
+> # 3. 连接服务器
+> tcp_client_socket.connect((ip, port))
+> 
+> # 4. 提示用户输入数据
+> data = input('请输入要发送的信息：')
+> 
+> # 5. 编码
+> tcp_client_socket.send(data.encode('gbk'))
+> 
+> # 6. 接收服务端的应答数据
+> recv_data = tcp_client_socket.recv(1024)
+> print('收到应答数据：', recv_data.decode('gbk'))
+> 
+> # 7. 关闭套接字
+> tcp_client_socket.close()
+> ```
+>
+> 运行结果：
+>
+> ![](./02-application-layer.assets/b62fc63e9171dd10e97dc61d81acb6f8.png)
+>
+> 如果忘记设置端口的关闭，非正常退出会导致端口一直被占用
+>
+> linux 环境在终端执行 `ps aux | grep py` 查看运行的进程，然后 `kill -9 pid` 杀掉进程
+>
+> ### 建立连接（三次握手）
+>
+> ![](https://img-blog.csdnimg.cn/img_convert/5f2cf05b64d8297ddf0b5569453eda95.png)
+>
+> SYN：连接请求 ACK：确认 FIN：关闭连接 seq：报文信号 ack：确认信号
+>
+> 1.  第一次握手：client 标志位 SYN 置 1，随机产生一个 seq=J，并将该数据包发送给 serve，client 进入 SYN_SENT 状态，等待 serve 确认
+>
+> 2.  第二次握手：serve 收到数据包后由标志位 SYN=1 知道 client 请求建立连接，serve 将 SYN 和 ACK 都置 1，ack（number）=J+1，+1 是逻辑加一（加密），随机产生一个值 seq=K，并将该数据包发送给 client 以确认连接请求，serve 进入 SYN_RECV 状态
+>
+> 3.  第三次握手：client 收到确认，检查 ack 是否为 J+1（解密），如果正确则将标志位 ACK 置 1，ack=K+1，并将该数据包发送给 serve，serve 检查 ack 是否为 K+1，如果正确则建立连接成功，client 和 serve 同时进入 ESTABLISHED 状态，完成三次握手，随后 client 和 serve 之间可以传输数据
+>
+> ### 断开连接（四次挥手）
+>
+> ![](https://img-blog.csdnimg.cn/img_convert/3cfefb9eba458bfc0868b36c2b769f52.png)
+>
+> 1.  第一次挥手：client 发送一个 FIN，用来关闭 client 到 serve 的数据传送
+>
+> 2.  第二次挥手：serve 收到 FIN 后，发送一个 ACK 给 client，确认序号为收到序号 + 1，表示还有剩余数据未传送完
+>
+> 3.  第三次挥手：serve 发送一个 FIN，用来关闭 serve 到 client 的数据传送
+>
+> 4.  第四次挥手：client 收到 FIN 后，接着发送一个 ACK 给 serve，确认序号为收到信号 + 1
+
+Q: TCP 传输中的 Segment 是什么？
+
+A: 是该协议负责传输的数据单元的专用名词。在 TCP 协议中，分段（segment）是指将传输的数据分割成多个较小的部分，以便更有效地在网络上传输。每个分段包含在TCP首部中的控制信息，如端口号、序列号和确认号等，以及在数据字段中携带的有效负载部分。分段的大小可以根据不同的网络条件进行调整，以最大程度地减少重传或延迟。在接收方，TCP会将收到的分段重新组合成完整的数据，以保证传输的准确性和完整性。
