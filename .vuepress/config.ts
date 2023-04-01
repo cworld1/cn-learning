@@ -1,5 +1,7 @@
 import { defaultTheme, defineUserConfig } from "vuepress";
 import navConfig from "./sidebar.js";
+import containerPlugin from "@vuepress/plugin-container";
+import { searchPlugin } from "@vuepress/plugin-search";
 
 export default defineUserConfig({
   // set site base to default value
@@ -36,5 +38,23 @@ export default defineUserConfig({
     sidebarDepth: 1,
   }),
   // plugins config
-  plugins: [],
+  plugins: [
+    // 提示卡片
+    containerPlugin({
+      type: "tip",
+      locales: {
+        "/": {
+          defaultInfo: "TIP",
+        },
+      },
+    }),
+    // 本地搜索
+    searchPlugin({
+      locales: {
+        "/": {
+          placeholder: "Search",
+        },
+      },
+    }),
+  ],
 });

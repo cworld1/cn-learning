@@ -10,15 +10,20 @@ const navConfig: NavbarConfig = [
   },
   {
     text: "Main Chapters",
-    children: ["/01-introduction.md", "/02-application-layer.md"],
+    children: [
+      "/01-introduction",
+      "/02-application-layer",
+      "/03-transport-layer",
+    ],
   },
   {
     text: "Experiments",
     children: [
-      "/experiment/01-网络基础知识及双绞线的制作.md",
-      "/experiment/02-交换机配置及VLAN建立.md",
-      "/experiment/03-三层交换及VLAN间路由.md",
+      "/experiment/01-网络基础知识及双绞线的制作",
+      "/experiment/02-交换机配置及VLAN建立",
+      "/experiment/03-三层交换及VLAN间路由",
       "/experiment/04-路由器基本配置及静态路由配置",
+      "/experiment/05-路由器动态路由配置",
     ],
   },
 ];
