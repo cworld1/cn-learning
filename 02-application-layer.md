@@ -1,14 +1,14 @@
 # Chapter 2: Application Layer
 
-## Overview
+## Outline
 
-- principles of network applications
-- Web and HTTP
-- Electronic mail: SMTP, POP3, IMAP
-- DNS
-- P2P applications
-- Video streaming and content distribution networks
-- Socket programming with UDP and TCP
+1. principles of network applications
+2. Web and HTTP
+3. Electronic mail: SMTP, POP3, IMAP
+4. DNS
+5. P2P applications
+6. Video streaming and content distribution networks
+7. Socket programming with UDP and TCP
 
 ## Creating a network app
 
@@ -17,7 +17,9 @@ write programs that:
 - run on (different) end systems
 - communicate over network
 
-  > e.g., web server software communicates with browser software
+  ::: tip
+  e.g., web server software communicates with browser software
+  :::
 
 no need to write software for network-core devices:
 
@@ -63,7 +65,9 @@ clients:
 - client process: process that initiates communication
 - server process: process that waits to be contacted
 
-> Applications with P2P architectures have client processes & server processes
+::: tip
+Applications with P2P architectures have client processes & server processes
+:::
 
 ### Sockets
 
@@ -552,7 +556,7 @@ IMAP 是另一种用于接收电子邮件的协议，它与 POP3 不同的是，
 
 ### DNS 相关服务器及实现
 
-> [什么是 DNS*DNS 如何工作*权威性 DNS 服务器 | Cloudflare 中国官网 | Cloudflare](https://www.cloudflare.com/zh-cn/learning/dns/what-is-dns/)
+> [什么是 DNS-DNS 如何工作-权威性 DNS 服务器 | Cloudflare 中国官网 | Cloudflare](https://www.cloudflare.com/zh-cn/learning/dns/what-is-dns/)
 >
 > ### 加载网页涉及 4 个 DNS 服务器
 >
@@ -680,6 +684,14 @@ CDN(Content Distribution Networks) 即内容分发网络，是一种在网络边
 
 ## Socket programming with UDP and TCP
 
+网络协议由三个要素组成，分别是语义、语法和时序。
+
+- 语义是解释控制信息每个部分的含义，它规定了需要发出何种控制信息，以及完成的动作与做出什么样的响应；
+- 语法是用户数据与控制信息的结构与格式，以及数据出现的顺序；
+- 时序是对事件发生顺序的详细说明。
+
+人们形象地将这三个要素描述为：语义表示要做什么，语法表示要怎么做，时序表示做的顺序。
+
 ### Socket programming
 
 Goal: learn how to build client/server applications that communicate using sockets.
@@ -748,7 +760,7 @@ UDP 具体实现：
 > 3. 当服务端接收到接收到客户端发送来的数据，进行数据处理，并将应答数据发送给客户端
 > 4. 客户端接收到应答数据，可进行数据处理或重复发送数据，也可退出进程
 >
-> ### serve 服务端
+> ### UDP Serve 服务端
 >
 > ```python
 > # coding=utf-8
@@ -782,7 +794,7 @@ UDP 具体实现：
 > udp_socket.close()
 > ```
 >
-> ### client 客户端
+> ### UDP Client 客户端
 >
 > ```python
 > import socket
@@ -843,76 +855,76 @@ UDP 具体实现：
 >
 > ![img](./02-application-layer.assets/7e3ab650d5f1ee24023bc55e37a4a29a.png)
 >
-> ### serve 服务端
+> ### TCP Serve 服务端
 >
 > ```python
 > from socket import *
-> 
+>
 > # 1. 创建tcp套接字
 > tcp_serve_socket = socket(AF_INET, SOCK_STREAM)
-> 
+>
 > # 2. 设置socket选项，程序退出后，端口会自动释放
 > tcp_serve_socket.setsockopt(SOL_SOCKET, SO_REUSEADDR, True)
-> 
+>
 > # 3. 本地信息，第二个为端口
 > addr = ('', 12345)
-> 
+>
 > # 4. 绑定地址
 > tcp_serve_socket.bind(addr)
-> 
+>
 > # 5. 设置监听
 > #    使用socket创建的套接字默认的属性是主动的，使用listen将其变为被动的
 > #    参数代表等待连接时间最多60秒
 > tcp_serve_socket.listen(60)
-> 
+>
 > # 6. 如果有新的客户端来连接服务，就产生一个新的套接字，专门为这个客户端服务
 > #    client_socket用来为这个客户端服务
 > #    原来的tcp_serve_socket就可以专门用来等待其他新用户的连接
 > client_socket, client_addr = tcp_serve_socket.accept()
-> 
+>
 > # 7. 阻塞等待客户端发送的信息
 > recv_data = client_socket.recv(1024)
 > print("接收到信息：", recv_data.decode('gbk'))
-> 
+>
 > # 8. 发送应答信息
 > string = '已收到信息'
 > client_socket.send(string.encode('gbk'))
-> 
+>
 > client_socket.close()
 > ```
 >
-> ## client 客户端
+> ## TCP Client 客户端
 >
 > ```python
 > import socket
-> 
+>
 > # 1. 创建TCP的套接字
 > tcp_client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-> 
+>
 > # 2. 目标ip信息
 > ip = input('请输入服务端ip：')
 > port = int(input('请输入服务端port：'))
-> 
+>
 > # 3. 连接服务器
 > tcp_client_socket.connect((ip, port))
-> 
+>
 > # 4. 提示用户输入数据
 > data = input('请输入要发送的信息：')
-> 
+>
 > # 5. 编码
 > tcp_client_socket.send(data.encode('gbk'))
-> 
+>
 > # 6. 接收服务端的应答数据
 > recv_data = tcp_client_socket.recv(1024)
 > print('收到应答数据：', recv_data.decode('gbk'))
-> 
+>
 > # 7. 关闭套接字
 > tcp_client_socket.close()
 > ```
 >
 > 运行结果：
 >
-> ![](./02-application-layer.assets/b62fc63e9171dd10e97dc61d81acb6f8.png)
+> ![运行结果](./02-application-layer.assets/b62fc63e9171dd10e97dc61d81acb6f8.png)
 >
 > 如果忘记设置端口的关闭，非正常退出会导致端口一直被占用
 >
@@ -920,7 +932,7 @@ UDP 具体实现：
 >
 > ### 建立连接（三次握手）
 >
-> ![](https://img-blog.csdnimg.cn/img_convert/5f2cf05b64d8297ddf0b5569453eda95.png)
+> ![三次握手](./02-application-layer.assets/5f2cf05b64d8297ddf0b5569453eda95.png)
 >
 > SYN：连接请求 ACK：确认 FIN：关闭连接 seq：报文信号 ack：确认信号
 >
@@ -932,7 +944,7 @@ UDP 具体实现：
 >
 > ### 断开连接（四次挥手）
 >
-> ![](https://img-blog.csdnimg.cn/img_convert/3cfefb9eba458bfc0868b36c2b769f52.png)
+> ![四次挥手](./02-application-layer.assets/3cfefb9eba458bfc0868b36c2b769f52.png)
 >
 > 1.  第一次挥手：client 发送一个 FIN，用来关闭 client 到 serve 的数据传送
 >
@@ -944,4 +956,4 @@ UDP 具体实现：
 
 Q: TCP 传输中的 Segment 是什么？
 
-A: 是该协议负责传输的数据单元的专用名词。在 TCP 协议中，分段（segment）是指将传输的数据分割成多个较小的部分，以便更有效地在网络上传输。每个分段包含在TCP首部中的控制信息，如端口号、序列号和确认号等，以及在数据字段中携带的有效负载部分。分段的大小可以根据不同的网络条件进行调整，以最大程度地减少重传或延迟。在接收方，TCP会将收到的分段重新组合成完整的数据，以保证传输的准确性和完整性。
+A: 是该协议负责传输的数据单元的专用名词。在 TCP 协议中，分段（segment）是指将传输的数据分割成多个较小的部分，以便更有效地在网络上传输。每个分段包含在 TCP 首部中的控制信息，如端口号、序列号和确认号等，以及在数据字段中携带的有效负载部分。分段的大小可以根据不同的网络条件进行调整，以最大程度地减少重传或延迟。在接收方，TCP 会将收到的分段重新组合成完整的数据，以保证传输的准确性和完整性。
