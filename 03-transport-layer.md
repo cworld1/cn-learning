@@ -119,12 +119,12 @@ Reliable data transfer(rdt) 即可靠传输。
 > 即只有有限种状态的，在特定条件下能切换状态的机器。比如刷卡就转的这种门禁机器。
 > :::
 >
-> rdt 2.0 增加了3种新机制来提升：
+> rdt 2.0 增加了 3 种新机制来提升：
 >
-> 1. 通过checksum来错误校验
+> 1. 通过 checksum 来错误校验
 > 2. 接收者反馈接受正误信息：
 >    - acknowledgements (ACKs): receiver explicitly(明确地) tells sender that pkt() received OK
 >    - negative acknowledgements (NAKs): receiver explicitly tells sender that pkt had errors
 > 3. 出错就重传
 >
-> 即，传输层对应用层的数据进行打包处理时，新增checksum（校验和），从而接收端可以对其数据包进行检验，如果正确，返回ACK，发送者继续发送下一个数据包；如果不正确，返回NAK，发送者重传数据。
+> 即，传输层对应用层的数据进行打包处理时，新增 checksum（校验和），从而接收端可以对其数据包进行检验，如果正确，返回 ACK，发送者继续发送下一个数据包；如果不正确，返回 NAK，发送者重传数据。
