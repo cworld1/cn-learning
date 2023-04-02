@@ -2,6 +2,7 @@ import { defaultTheme, defineUserConfig } from "vuepress";
 import navConfig from "./sidebar.js";
 import containerPlugin from "@vuepress/plugin-container";
 import { searchPlugin } from "@vuepress/plugin-search";
+import { pwaPlugin } from "@vuepress/plugin-pwa";
 
 export default defineUserConfig({
   // set site base to default value
@@ -9,13 +10,9 @@ export default defineUserConfig({
 
   // extra tags in `<head>`
   head: [
-    [
-      "link",
-      {
-        rel: "icon",
-        href: "/favicon.png",
-      },
-    ],
+    ["link", { rel: "icon", href: "/icons/favicon.png" }],
+    ["meta", { name: "theme-color", content: "#3eaf7c" }],
+    ["link", { rel: "manifest", href: "/manifest.webmanifest" }],
   ],
 
   // site-level locales config
@@ -56,5 +53,7 @@ export default defineUserConfig({
         },
       },
     }),
+    // PWA
+    pwaPlugin({}),
   ],
 });
