@@ -24,26 +24,48 @@ html.dark {
   backdrop-filter: blur(20px);
 }
 
-// 左侧栏 激活样式调整
+// 左侧栏 激活样式调整 & 各板块样式
+.sidebar > ul.sidebar-items > li {
+  padding-top: 10px;
+  padding-bottom: 24px;
+  position: relative;
+
+  &::before {
+    display: block;
+    content: "";
+    position: absolute;
+    transition: border-color var(--t-color), left var(--t-color);
+    left: 1.2rem;
+    bottom: 0;
+    height: 1px;
+    width: 80%;
+    background-color: var(--c-border);
+    opacity: 0.5;
+  }
+}
 .sidebar-item {
   position: relative;
   border-left: none;
   margin-left: 0.25rem;
 
-  &:not(.sidebar-heading)::before {
-    display: block;
-    content: "";
-    position: absolute;
-    transition: border-color var(--t-color), left var(--t-color);
-    left: -0.25rem;
-    height: 1.4em;
-    width: 0.25rem;
-    background-color: transparent;
-    border-radius: 0 0.25rem 0.25rem 0;
-  }
-  &.active:not(.sidebar-heading)::before {
-    background-color: var(--c-text-accent);
-    left: 0;
+  &:not(.sidebar-heading) {
+    padding: 0.35rem 1rem 0.35rem 1.2rem;
+
+    &::before {
+      display: block;
+      content: "";
+      position: absolute;
+      transition: border-color var(--t-color), left var(--t-color);
+      left: -0.25rem;
+      height: 1.4em;
+      width: 0.25rem;
+      background-color: transparent;
+      border-radius: 0 0.25rem 0.25rem 0;
+    }
+    &.active::before {
+      background-color: var(--c-text-accent);
+      left: 0;
+    }
   }
 }
 .sidebar-item-children
