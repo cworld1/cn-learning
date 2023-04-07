@@ -3,6 +3,8 @@ import navConfig from "./sidebar.js";
 import containerPlugin from "@vuepress/plugin-container";
 import { searchPlugin } from "@vuepress/plugin-search";
 import { pwaPlugin } from "@vuepress/plugin-pwa";
+import { copyCodePlugin } from "vuepress-plugin-copy-code2";
+import { commentPlugin } from "vuepress-plugin-comment2";
 
 export default defineUserConfig({
   // set site base to default value
@@ -24,6 +26,7 @@ export default defineUserConfig({
   pagePatterns: ["**/*.md", "!**/README.md", "!.vuepress", "!node_modules"],
   // theme config
   theme: defaultTheme({
+    repo: "cworld1/cn-learning",
     // 导航栏配置
     navbar: [
       { text: "Home", link: "/" },
@@ -55,5 +58,18 @@ export default defineUserConfig({
     }),
     // PWA
     pwaPlugin({}),
+    // 代码复制
+    copyCodePlugin({
+      showInMobile: true,
+    }),
+    // 评论
+    commentPlugin({
+      provider: "Giscus",
+      comment: true,
+      repo: "cworld1/cn-learning",
+      repoId: "R_kgDOJNQ-9g",
+      category: "General",
+      categoryId: "DIC_kwDOJNQ-9s4CVmYU",
+    }),
   ],
 });
