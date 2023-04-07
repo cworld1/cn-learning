@@ -8,6 +8,7 @@
 <script setup lang="ts">
 import { onUnmounted, onMounted, ref } from "vue";
 import ParentLayout from "@vuepress/theme-default/lib/client/layouts/Layout.vue";
+
 const isDarkMode = ref(false);
 
 onMounted(() => {
