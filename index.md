@@ -2,7 +2,7 @@
 home: true
 heroImage: hero.png
 actions:
-  - text: Get Started
+  - text: ✨ Get Started
     link: /01-introduction/
     type: primary
   - text: Introduction

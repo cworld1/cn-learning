@@ -1,0 +1,112 @@
+:root {
+  --br: 6px;
+  --c-bg-navbar: #ffffffd9;
+  --c-text-quote: #5f5f5f;
+  --c-bg-quote: var(--c-bg-light);
+
+  --code-bg-color: #f5f5f5;
+  --code-hl-bg-color: #cbcbcba8;
+  --code-default-color: #000;
+  --code-operator-color: #43a7a5;
+}
+html.dark {
+  --c-bg-navbar: #22272ed9;
+  --c-text-quote: #acacac;
+
+  --code-bg-color: #282c34;
+  --code-hl-bg-color: #4d4d4da8;
+  --code-default-color: #fff;
+  --code-operator-color: #67cdcc;
+}
+
+// 顶栏 模糊效果
+.navbar {
+  backdrop-filter: blur(20px);
+}
+
+// 左侧栏 激活样式调整
+.sidebar-item {
+  position: relative;
+  border-left: none;
+  margin-left: 0.25rem;
+
+  &:not(.sidebar-heading)::before {
+    display: block;
+    content: "";
+    position: absolute;
+    transition: border-color var(--t-color), left var(--t-color);
+    left: -0.25rem;
+    height: 1.4em;
+    width: 0.25rem;
+    background-color: transparent;
+    border-radius: 0 0.25rem 0.25rem 0;
+  }
+  &.active:not(.sidebar-heading)::before {
+    background-color: var(--c-text-accent);
+    left: 0;
+  }
+}
+.sidebar-item-children
+  .sidebar-item-children
+  .sidebar-item:not(.sidebar-heading).active::before {
+  display: none;
+}
+
+// 右侧侧栏 样式匹配修复
+.anchor-right .anchor-right-content {
+  transition: border-color var(--t-color);
+  border-color: var(--c-border) !important;
+  .item {
+    transition: color var(--t-color);
+    color: var(--c-text) !important;
+    &.active {
+      color: var(--c-text-accent) !important;
+    }
+  }
+}
+
+// 主页按钮
+.home .hero .action-button {
+  border-radius: var(--br);
+}
+
+// 正文引用框
+blockquote {
+  transition: background-color var(--t-color);
+  border-radius: var(--br);
+  padding: 0.4rem 1rem 0.4rem 1rem;
+  background-color: var(--c-bg-quote);
+}
+
+// 正文小组件提示框
+.custom-container.tip {
+  border-radius: var(--br);
+}
+
+// 代码块
+div[class*="language-"] {
+  transition: background-color var(--t-color);
+  &.line-numbers-mode::after {
+    transition: border-color var(--t-color);
+  }
+}
+.theme-default-content pre {
+  code,
+  &[class*="language-"] code {
+    transition: color var(--t-color);
+    color: var(--code-default-color);
+  }
+}
+.token.operator,
+.token.entity,
+.token.url {
+  color: var(--code-operator-color);
+}
+
+// 图片
+.theme-default-content img {
+  border-radius: var(--br);
+}
+.theme-default-content blockquote img {
+  margin: 0.4rem 0;
+}
