@@ -1,10 +1,17 @@
+// Configs
 import { defaultTheme, defineUserConfig } from "vuepress";
 import navConfig from "./sidebar.js";
+// Official plugins
 import containerPlugin from "@vuepress/plugin-container";
 import { searchPlugin } from "@vuepress/plugin-search";
 import { pwaPlugin } from "@vuepress/plugin-pwa";
+import { mediumZoomPlugin } from "@vuepress/plugin-medium-zoom";
+// Community plugins
 import { copyCodePlugin } from "vuepress-plugin-copy-code2";
 import { commentPlugin } from "vuepress-plugin-comment2";
+import { mdEnhancePlugin } from "vuepress-plugin-md-enhance";
+import { sitemapPlugin } from "vuepress-plugin-sitemap2";
+import vuepressPluginAnchorRight from "vuepress-plugin-anchor-right";
 
 export default defineUserConfig({
   // set site base to default value
@@ -42,11 +49,6 @@ export default defineUserConfig({
     // 提示卡片
     containerPlugin({
       type: "tip",
-      locales: {
-        "/": {
-          defaultInfo: "TIP",
-        },
-      },
     }),
     // 本地搜索
     searchPlugin({
@@ -58,11 +60,15 @@ export default defineUserConfig({
     }),
     // PWA
     pwaPlugin({}),
+    // 图片缩放
+    mediumZoomPlugin({}),
     // 代码复制
+    // https://plugin-copy-code2.vuejs.press/zh/
     copyCodePlugin({
       showInMobile: true,
     }),
     // 评论
+    // https://plugin-comment2.vuejs.press/zh/
     commentPlugin({
       provider: "Giscus",
       comment: true,
@@ -71,5 +77,19 @@ export default defineUserConfig({
       category: "General",
       categoryId: "DIC_kwDOJNQ-9s4CVmYU",
     }),
+    // Markdown 增强
+    // https://plugin-md-enhance.vuejs.press/zh/
+    mdEnhancePlugin({
+      katex: true,
+      imgLazyload: true,
+    }),
+    // Sitemap
+    // https://plugin-sitemap2.vuejs.press/zh/
+    sitemapPlugin({
+      hostname: "https://cn.cworld.top",
+    }),
+    // 右侧锚点
+    // https://github.com/dingshaohua-cn/vuepress-plugin-anchor-right
+    [vuepressPluginAnchorRight()],
   ],
 });
