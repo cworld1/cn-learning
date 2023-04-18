@@ -1,4 +1,6 @@
-# Chapter 3: Transport Layer
+---
+title: "Chapter 3: Transport Layer"
+---
 
 ## Outline
 
@@ -51,7 +53,7 @@
 
 ### UDP: User Datagram Protocol [RFC 768]
 
-基础原理已经在 [Chapter 2@Client/server socket: UDP](./02-application-layer#client-server-socket-udp) 讲过，不再赘述。
+基础原理已经在 [Chapter 2 @ Client/server socket: UDP](./02-application-layer#client-server-socket-udp) 讲过，不再赘述。
 
 ### UDP: segment header
 
@@ -169,7 +171,7 @@ rdt 2.0 增加了 3 种新机制来提升：
 
 做了一点点微不足道的改进，再见啦 NAK，ACK 就够了
 
-**我们在 ACK 的信息上加上了顺序号**：sender 发送 0 号数据包，如果接收方正确接收到 0 号，返回（ACK0），发送方接着发送 1 号数据包。如果接收方没有接收到 0 号数据包或出现错误，返回（ACK1），发送方重传 0 号数据包。
+**我们在 ACK 的信息上加上了顺序号（sequence number）**：sender 发送 0 号数据包，如果接收方正确接收到 0 号，返回（ACK0），发送方接着发送 1 号数据包。如果接收方没有接收到 0 号数据包或出现错误，返回（ACK1），发送方重传 0 号数据包。
 
 ::: tip
 相当于抽象成了“若不符合要求，重发”和“发新的”两个选项
@@ -377,7 +379,7 @@ Pipelined protocols(管道协议/窗口协议): sender allows multiple, “in-fl
 
 Two generic forms of pipelined protocols: go-Back-N(返回 N 个), selective repeat(选择重传)
 
-Go-back-N(返回 N 个):
+#### Go-back-N(返回 N 个)
 
 - sender can have up to N unACKed packets in pipeline
 - receiver only sends cumulative(累计的) ack: doesn’t ack packet if there’s a gap(有缺口的)
@@ -415,7 +417,7 @@ Go-back-N(返回 N 个):
 >
 > The Go-Back-N protocol adopts the use of cumulative acknowledgments. That is, receiving acknowledgment for frame n means the frames n-1, n-2, and so on are acknowledged as well. We denote such acknowledgments as ACK n.
 
-Selective Repeat(选择重传):
+#### Selective Repeat(选择重传)
 
 - sender can have up to N unACKed packets in pipeline
 - receiver sends **individual ack** for each packet
@@ -453,7 +455,7 @@ Selective Repeat(选择重传):
 
 - **point-to-point(端对端)**: one sender, one receiver
 
-- **reliable, in-order byte steam(可靠的传输)**: no “message boundaries”(消息边界)
+- **reliable, in-order byte steam(可靠的传输)**: no “message ”(消息边界)
 
 - **pipelined(最大阈值控制)**: TCP congestion and flow control set window size
 
@@ -465,7 +467,7 @@ Selective Repeat(选择重传):
 - **connection-oriented(以连接为导向)**: handshaking (exchange of control msgs) inits sender, receiver state before data exchange
 - **flow controlled(流量控制)**: sender will not overwhelm receiver
 
-### TCP segment structure
+### Segment structure
 
 ![image-20230406181022884](./03-transport-layer.assets/image-20230406181022884.png)
 
@@ -489,7 +491,7 @@ Selective Repeat(选择重传):
 >
 > ![image](./03-transport-layer.assets/image.png)
 >
-> The first computer sends a packet with the SYN bit set to 111 (SYN = "synchronize?"). The second computer sends back a packet with the ACK bit set to 111 (ACK = "acknowledge!") plus the SYN bit set to 111. The first computer replies back with an ACK.
+> The first computer sends a packet with the SYN bit set to 111 (SYN = "synchronize(同步吗)?"). The second computer sends back a packet with the ACK bit set to 111 (ACK = "acknowledge!") plus the SYN bit set to 111. The first computer replies back with an ACK.
 >
 > The SYN and ACK bits are both part of the TCP header:
 >
@@ -521,7 +523,7 @@ Selective Repeat(选择重传):
 >
 > ### Detecting lost packets
 >
-> TCP connections can detect lost packets using a timeout.
+> TCP connections can detect lost packets using a **timeout**.
 >
 > ![image (5)](./03-transport-layer.assets/image (5).png)
 >
@@ -548,3 +550,183 @@ Selective Repeat(选择重传):
 > In both situations, the recipient has to deal with out of order packets. Fortunately, the recipient can use the sequence numbers to reassemble(重新组装) the packet data in the correct order.
 >
 > ![image (9)](./03-transport-layer.assets/image (9).png)
+
+#### TCP round trip time, timeout
+
+How to set TCP timeout value?
+
+- longer than RTT(Round-Trip Time) (but RTT varies(是变化的))
+- too short: premature(过早的) timeout, unnecessary retransmissions(不必要的重发)
+- too long: slow reaction(反应缓慢) to segment loss(片段损失)
+
+How to estimate RTT?
+
+- SampleRTT: measured time(测量时间) from segment transmission until ACK receipt (ignore retransmissions)
+
+- SampleRTT will vary, want estimated(估计的) RTT “smoother”
+
+  average several recent measurements(对最近的几个测量值进行取平均), not just current SampleRTT
+
+$$
+EstimatedRTT = (1 - \alpha) * EstimatedRTT + \alpha * SampleRTT
+$$
+
+typical value: $\alpha$ = 0.125
+
+![image-20230413161231370](./03-transport-layer.assets/image-20230413161231370.png)
+
+### Reliable data transfer
+
+TCP creates rdt service on top of(在…之上) IP’s unreliable service:
+
+- pipelined segments(管道化分段传输)
+- cumulative acks(累积式确认应答)
+- single retransmission timer(单一重传计时器)
+
+retransmissions triggered by(由…触发):
+
+- timeout events
+- duplicate acks(重复应答)
+
+#### TCP sender (simplified)
+
+![image-20230413162814647](./03-transport-layer.assets/image-20230413162814647.png)
+
+#### TCP: retransmission scenarios
+
+![image-20230413163235946](./03-transport-layer.assets/image-20230413163235946.png)
+
+#### TCP ACK generation
+
+| event at receiver                                                                                                    | TCP receiver action                                                                        |
+| -------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ |
+| **arrival of in-order segment** with expected seq #(具有预期序号#). All data up to expected seq # already ACKed      | **delayed ACK(延迟确认)**. Wait up to 500ms for next segment. If no next segment, send ACK |
+| **arrival of in-order segment(按顺序段到达)** with expected seq #. One other segment has ACK pending(等待，悬而未决) | **immediately send single cumulative(累计的) ACK**, ACKing both in-order segments          |
+| **arrival of out-of-order segment(无序段)** higher-than-expect seq #(高于预期序号#). Gap detected(差异检测)          | **immediately send duplicate ACK**, indicating seq # of next expected byte                 |
+| **arrival of segment** that partially or completely(部分或完全) fills gap(填补缺口)                                  | immediate send ACK, provided that segment starts at lower end of gap                       |
+
+> [图解 TCP 重传、滑动窗口、流量控制、拥塞控制 - 知乎 (zhihu.com)](https://zhuanlan.zhihu.com/p/135932018)
+>
+> SACK 方法
+>
+> 还有一种实现重传机制的方式叫：SACK（ Selective Acknowledgment 选择性确认）。
+>
+> 这种方式需要在 TCP 头部「选项」字段里加一个 SACK 的东西，它**可以将缓存的地图发送给发送方**，这样发送方就可以知道哪些数据收到了，哪些数据没收到，知道了这些信息，就可以**只重传丢失的数据**。
+>
+> 如下图，发送方收到了三次同样的 ACK 确认报文，于是就会触发快速重发机制，通过 SACK 信息发现只有 200~299 这段数据丢失，则重发时，就只选择了这个 TCP 段进行重复。
+>
+> ![img](./03-transport-layer.assets/v2-a1c07b4e4f4b42983af6750f3624e51d_b.jpg)
+
+### Flow control
+
+> [图解 TCP 重传、滑动窗口、流量控制、拥塞控制 - 知乎 (zhihu.com)](https://zhuanlan.zhihu.com/p/135932018)
+>
+> 发送方不能无脑的发数据给接收方，要考虑接收方处理能力。如果一直无脑的发数据给对方，但对方处理不过来，那么就会导致触发重发机制，从而导致网络流量的无端的浪费。
+>
+> 为了解决这种现象发生，**TCP 提供一种机制可以让「发送方」根据「接收方」的实际接收能力控制发送的数据量，这就是所谓的流量控制。**
+>
+> 下面举个栗子，为了简单起见，假设以下场景：
+>
+> - 客户端是接收方，服务端是发送方
+> - 假设接收窗口和发送窗口相同，都为 200
+> - 假设两个设备在整个传输过程中都保持相同的窗口大小，不受外界影响
+>
+> ![img](./03-transport-layer.assets/v2-4b53936be09ea0ad5b9c02d4ab2715f1_b.jpg)
+>
+> 根据上图的流量控制，说明下每个过程：
+>
+> 1. 客户端向服务端发送请求数据报文。这里要说明下，本次例子是把服务端作为发送方，所以没有画出服务端的接收窗口。
+> 2. 服务端收到请求报文后，发送确认报文和 80 字节的数据，于是可用窗口 Usable 减少为 120 字节，同时 SND.NXT 指针也向右偏移 80 字节后，指向 321，**这意味着下次发送数据的时候，序列号是 321。**
+> 3. 客户端收到 80 字节数据后，于是接收窗口往右移动 80 字节，RCV.NXT 也就指向 321，**这意味着客户端期望的下一个报文的序列号是 321**，接着发送确认报文给服务端。
+> 4. 服务端再次发送了 120 字节数据，于是可用窗口耗尽为 0，服务端无法在继续发送数据。
+> 5. 客户端收到 120 字节的数据后，于是接收窗口往右移动 120 字节，RCV.NXT 也就指向 441，接着发送确认报文给服务端。
+> 6. 服务端收到对 80 字节数据的确认报文后，SND.UNA 指针往右偏移后指向 321，于是可用窗口 Usable 增大到 80。
+> 7. 服务端收到对 120 字节数据的确认报文后，SND.UNA 指针往右偏移后指向 441，于是可用窗口 Usable 增大到 200。
+> 8. 服务端可以继续发送了，于是发送了 160 字节的数据后，SND.NXT 指向 601，于是可用窗口 Usable 减少到 40。
+> 9. 客户端收到 160 字节后，接收窗口往右移动了 160 字节，RCV.NXT 也就是指向了 601，接着发送确认报文给服务端。
+> 10. 服务端收到对 160 字节数据的确认报文后，发送窗口往右移动了 160 字节，于是 SND.UNA 指针偏移了 160 后指向 601，可用窗口 Usable 也就增大至了 200。
+>
+> 前面的流量控制例子，我们假定了发送窗口和接收窗口是不变的，但是实际上，发送窗口和接收窗口中所存放的字节数，都是放在操作系统内存缓冲区中的，而操作系统的缓冲区，会**被操作系统调整**。
+
+### Connection Management
+
+Before exchanging data, sender/receiver “handshake”:
+
+- Agree to establish(建立) connection (each knowing the other willing to establish connection)
+- Agree on connection parameters
+
+详见：
+
+- [Chapter2 @ 建立连接（三次握手）](./02-application-layer.html#建立连接-三次握手)
+- [Chapter2 @ 断开连接（四次挥手）](./02-application-layer.html#断开连接-四次挥手)
+- [Chapter3 @ Packet format](#packet-format)
+
+三次握手：
+
+![image-20230413173431851](./03-transport-layer.assets/image-20230413173431851.png)
+
+四次挥手：
+
+![image-20230413173420182](./03-transport-layer.assets/image-20230413173420182.png)
+
+## Principles of congestion control
+
+参考：[一分钟搞懂流量控制与拥塞控制 - 知乎 (zhihu.com)](https://zhuanlan.zhihu.com/p/102175027)，有删改。
+
+### 流量控制与拥塞控制
+
+流量控制（flow control）: 接收端告诉发送端该发多少，解决发送方和接收方速率不匹配的问题，通过滑动窗口或者其他措施限制发送端的速率。
+
+- **作用：控制发送方的窗口大小，让接收方来得及接收。**
+- 控制对象：流量控制是点对点的，只控制一个发送端。
+- 实现原理：通过滑动窗口就可以实现，接收方告知发送方自己的窗口大小，发送方立刻更改即可实现流量控制。
+
+拥塞控制（congestion control）：为了避免网络资源被耗尽的问题，通过拥塞窗口或者其他方法感知和调整网络的状态。
+
+- **作用：避免给整体的网络造成较大的堵塞。**
+- 控制对象：拥塞控制是全局的，涉及到所有的主机和网络因素。
+- 实现原理：四种算法（慢开始，拥塞避免、快重传、快恢复）
+
+下面将详细讲解拥塞控制的四种算法。
+
+### 慢开始
+
+发送方先探测一下网络的拥塞程度，并不是一开始就发送大量的数据，然后**根据拥塞程度**的增大或减小拥塞窗口。
+
+### 拥塞避免
+
+该算法用来控制拥塞窗口的增长速率，每一次 RTT 往返之后，**拥塞窗口 + 1 而不是翻倍**，这样的话拥塞窗口以线性速率增长，流量可控。
+
+### 快重传
+
+当发送方没有在超时期限内收到确认信号的话就认为网络阻塞了，此时拥塞窗口变为 1 ，同时把慢开始门限值 ssthresh 减半。
+
+- 拥塞窗口大小 < ssthresh 时，使用慢开始算法
+- 拥塞窗口大小 > ssthresh 时，使用拥塞避免算法
+- 拥塞窗口大小 = ssthresh 时，慢开始与拥塞避免算法均可
+
+接收方收到一个失序的报文段后就立刻发出重复确认，如下图，M3丢失，会重复确认 M2
+
+![img](./03-transport-layer.assets/v2-6d090720878e33df5726c381d33ce6f4_b.jpg)
+
+一旦**接收方连续 3 次收到**同一个重复确认就会立马启动快重传算法，即立马重传 M3，而不会等待 M3 的超时时间到期。
+
+### 快恢复
+
+快恢复是**配合快重传使用**的。
+
+上图所示的 M3 丢失，可能是因为 M3 在某个节点因为网络波动等非网络拥挤情况阻塞住了。
+
+也就是网络其实并没有拥塞，快恢复就是在此情况下避免直接重传会真正导致网络阻塞，其原理就是**先将拥塞窗口设置成 ssthresh 的大小，然后执行拥塞避免算法**
+
+### 控制流程
+
+下图展示了整个控制流程：
+
+![img](./03-transport-layer.assets/v2-3319d090787d8941cea25376e284679b_b.jpg)
+
+## TCP congestion control
+
+[TCP的拥塞控制（详解）_tcp拥塞控制_一颗程序媛0915的博客-CSDN博客](https://blog.csdn.net/qq_41431406/article/details/97926927)
+
+待补充。
