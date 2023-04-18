@@ -161,11 +161,12 @@ FDM（Frequency Division Multiplexing）和 TDM（Time Division Multiplexing）�
   >
   > ![Six switches connecting one telephone to another to show the different routes a data packet or analogue signal can take.](./01-introduction.assets/isaac_cs_net_internet_circuit_switching.png)
 
+::: tip
 简单的说，概念上两者的区别：
 
-> Packet switch：按需分配
->
-> Circuit switch：短时间包场
+- Packet switch：按需分配
+- Circuit switch：短时间包场
+  :::
 
 优缺点上：
 
