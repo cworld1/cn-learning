@@ -22,6 +22,7 @@ html.dark {
 // 顶栏 模糊效果
 .navbar {
   backdrop-filter: blur(20px);
+  z-index: 40;
 }
 
 // 左侧栏 激活样式调整 & 各板块样式
