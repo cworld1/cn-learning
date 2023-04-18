@@ -14,6 +14,7 @@ const navConfig: NavbarConfig = [
       "/01-introduction",
       "/02-application-layer",
       "/03-transport-layer",
+      "/04-network-layer",
     ],
   },
   {
