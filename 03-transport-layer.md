@@ -705,7 +705,7 @@ Before exchanging data, sender/receiver “handshake”:
 - 拥塞窗口大小 > ssthresh 时，使用拥塞避免算法
 - 拥塞窗口大小 = ssthresh 时，慢开始与拥塞避免算法均可
 
-接收方收到一个失序的报文段后就立刻发出重复确认，如下图，M3丢失，会重复确认 M2
+接收方收到一个失序的报文段后就立刻发出重复确认，如下图，M3 丢失，会重复确认 M2
 
 ![img](./03-transport-layer.assets/v2-6d090720878e33df5726c381d33ce6f4_b.jpg)
 
@@ -727,6 +727,6 @@ Before exchanging data, sender/receiver “handshake”:
 
 ## TCP congestion control
 
-[TCP的拥塞控制（详解）_tcp拥塞控制_一颗程序媛0915的博客-CSDN博客](https://blog.csdn.net/qq_41431406/article/details/97926927)
+[TCP 的拥塞控制（详解）*tcp 拥塞控制*一颗程序媛 0915 的博客-CSDN 博客](https://blog.csdn.net/qq_41431406/article/details/97926927)
 
 待补充。

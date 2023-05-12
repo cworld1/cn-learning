@@ -187,13 +187,13 @@ SSL：
 >
 > 最初版本的 HTTP 协议并没有版本号，后来它的版本号被定位在 0.9 以区分后来的版本。HTTP/0.9 极其简单：请求由单行指令构成，以唯一可用方法 [`GET`](https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Methods/GET) 开头，其后跟目标资源的路径（一旦连接到服务器，协议、服务器、端口号这些都不是必须的）。
 >
-> ```
+> ```text
 > GET /mypage.html
 > ```
 >
 > 响应也极其简单的：只包含响应文档本身。
 >
-> ```
+> ```text
 > <HTML>
 > 这是一个非常简单的 HTML 页面
 > </HTML>
@@ -212,7 +212,7 @@ SSL：
 >
 > 一个典型的请求看起来就像这样：
 >
-> ```
+> ```text
 > GET /mypage.html HTTP/1.0
 > User-Agent: NCSA_Mosaic/2.0 (Windows 3.1)
 >
@@ -228,7 +228,7 @@ SSL：
 >
 > 接下来是第二个连接，请求获取图片（并具有相同的响应）：
 >
-> ```
+> ```text
 > GET /myimage.gif HTTP/1.0
 > User-Agent: NCSA_Mosaic/2.0 (Windows 3.1)
 >
@@ -256,7 +256,7 @@ SSL：
 >
 > 一个典型的请求流程，所有请求都通过一个连接实现，看起来就像这样：
 >
-> ```
+> ```text
 > GET /en-US/docs/Glossary/Simple_header HTTP/1.1
 > Host: developer.mozilla.org
 > User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.9; rv:50.0) Gecko/20100101 Firefox/50.0
@@ -439,7 +439,7 @@ Conditional GET 是一个 HTTP 协议的特性，可以在客户端像服务器�
 >
 > Here are the basics of email:
 >
-> 1. An email address: This is a unique identifier for each user, typically in the format of name@domain.com.
+> 1. An email address: This is a unique identifier for each user, typically in the format of `name@domain.com`.
 > 2. An email client: This is a software program used to send, receive and manage emails, such as Gmail, Outlook, or Apple Mail.
 > 3. An email server: This is a computer system responsible for storing and forwarding emails to their intended recipients.
 
@@ -488,7 +488,7 @@ IMAP 是另一种用于接收电子邮件的协议，它与 POP3 不同的是，
 >
 >   It obeys RFC 822: standard for text message format. Like:
 >
-> ```
+> ```text
 > DATA
 > Date: Mon, 4 April 2022
 > From: Alice alice@example.com
@@ -936,23 +936,23 @@ UDP 具体实现：
 >
 > SYN：连接请求 ACK：确认 FIN：关闭连接 seq：报文信号 ack：确认信号
 >
-> 1.  第一次握手：client 标志位 SYN 置 1，随机产生一个 seq=J，并将该数据包发送给 serve，client 进入 SYN_SENT 状态，等待 serve 确认
+> 1. 第一次握手：client 标志位 SYN 置 1，随机产生一个 seq=J，并将该数据包发送给 serve，client 进入 SYN_SENT 状态，等待 serve 确认
 >
-> 2.  第二次握手：serve 收到数据包后由标志位 SYN=1 知道 client 请求建立连接，serve 将 SYN 和 ACK 都置 1，ack（number）=J+1，+1 是逻辑加一（加密），随机产生一个值 seq=K，并将该数据包发送给 client 以确认连接请求，serve 进入 SYN_RECV 状态
+> 2. 第二次握手：serve 收到数据包后由标志位 SYN=1 知道 client 请求建立连接，serve 将 SYN 和 ACK 都置 1，ack（number）=J+1，+1 是逻辑加一（加密），随机产生一个值 seq=K，并将该数据包发送给 client 以确认连接请求，serve 进入 SYN_RECV 状态
 >
-> 3.  第三次握手：client 收到确认，检查 ack 是否为 J+1（解密），如果正确则将标志位 ACK 置 1，ack=K+1，并将该数据包发送给 serve，serve 检查 ack 是否为 K+1，如果正确则建立连接成功，client 和 serve 同时进入 ESTABLISHED 状态，完成三次握手，随后 client 和 serve 之间可以传输数据
+> 3. 第三次握手：client 收到确认，检查 ack 是否为 J+1（解密），如果正确则将标志位 ACK 置 1，ack=K+1，并将该数据包发送给 serve，serve 检查 ack 是否为 K+1，如果正确则建立连接成功，client 和 serve 同时进入 ESTABLISHED 状态，完成三次握手，随后 client 和 serve 之间可以传输数据
 >
 > ### 断开连接（四次挥手）
 >
 > ![四次挥手](./02-application-layer.assets/3cfefb9eba458bfc0868b36c2b769f52.png)
 >
-> 1.  第一次挥手：client 发送一个 FIN，用来关闭 client 到 serve 的数据传送
+> 1. 第一次挥手：client 发送一个 FIN，用来关闭 client 到 serve 的数据传送
 >
-> 2.  第二次挥手：serve 收到 FIN 后，发送一个 ACK 给 client，确认序号为收到序号 + 1，表示还有剩余数据未传送完
+> 2. 第二次挥手：serve 收到 FIN 后，发送一个 ACK 给 client，确认序号为收到序号 + 1，表示还有剩余数据未传送完
 >
-> 3.  第三次挥手：serve 发送一个 FIN，用来关闭 serve 到 client 的数据传送
+> 3. 第三次挥手：serve 发送一个 FIN，用来关闭 serve 到 client 的数据传送
 >
-> 4.  第四次挥手：client 收到 FIN 后，接着发送一个 ACK 给 serve，确认序号为收到信号 + 1
+> 4. 第四次挥手：client 收到 FIN 后，接着发送一个 ACK 给 serve，确认序号为收到信号 + 1
 
 Q: TCP 传输中的 Segment 是什么？
 
