@@ -227,8 +227,8 @@ FDM（Frequency Division Multiplexing）和 TDM（Time Division Multiplexing）�
 >
 > Factors affecting propagation delay:
 >
-> 1.  **Distance**: It takes more time to reach the destination if the distance of the medium is longer.
-> 2.  **Velocity**: If the velocity(speed) of the signal is higher, the packet will be received faster.
+> 1. **Distance**: It takes more time to reach the destination if the distance of the medium is longer.
+> 2. **Velocity**: If the velocity(speed) of the signal is higher, the packet will be received faster.
 >
 > $$
 > Tp = Distance / Velocity
