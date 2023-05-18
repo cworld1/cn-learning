@@ -62,7 +62,11 @@ As the author is only a beginner in learning Computer Network, there are obvious
 
 Some of the electronic textbooks have helped the author a lot in his studies, and without them, this notebook would not have been possible. I would like to express my gratitude to the original authors of these materials. If you have any doubts about this project, you can also read the following textbooks carefully to remedy them.
 
-<!-- - [STATS 201 : Computer Network](https://courseoutline.auckland.ac.nz/dco/course/STATS/201/1215) -->
+- [STATS 201 : Computer Network](https://courseoutline.auckland.ac.nz/dco/course/STATS/201/1215)
+- [college_assignment/计算机网络 · GitHub](https://github.com/A-BigTree/college_assignment/blob/main/learning_Notes/计算机网络.md#56-icmp因特网控制报文协议)
+- [笔记-计算机网络-自顶向下 | FEZ 的博客](https://toby-fish.github.io/2021/11/22/笔记-计算机网络-自顶向下/)
+- [中科大郑烇、杨坚《计算机网络》课程 学习笔记-CSDN 博客](https://blog.csdn.net/qq_53111905/category_11228995.html)
+- [Jim Kurose (author’s website of Computer Networking: a Top Down Approach (P)](http://gaia.cs.umass.edu/kurose_ross/index.php)
 
 ## License
 
