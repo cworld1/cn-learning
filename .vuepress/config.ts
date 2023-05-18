@@ -11,6 +11,7 @@ import { copyCodePlugin } from "vuepress-plugin-copy-code2";
 import { commentPlugin } from "vuepress-plugin-comment2";
 import { mdEnhancePlugin } from "vuepress-plugin-md-enhance";
 import { sitemapPlugin } from "vuepress-plugin-sitemap2";
+import { seoPlugin } from "vuepress-plugin-seo2";
 import vuepressPluginAnchorRight from "vuepress-plugin-anchor-right";
 
 export default defineUserConfig({
@@ -87,6 +88,12 @@ export default defineUserConfig({
     // https://plugin-sitemap2.vuejs.press/zh/
     sitemapPlugin({
       hostname: "https://cn.cworld.top",
+    }),
+    // SEO
+    // https://plugin-seo2.vuejs.press/zh/
+    seoPlugin({
+      hostname: "https://cn.cworld.top",
+      author: "CWorld"
     }),
     // 右侧锚点
     // https://github.com/dingshaohua-cn/vuepress-plugin-anchor-right
