@@ -391,3 +391,115 @@ SDN 体系结构具有四个关键特征：
 - 数据平面与控制平面分离（Separation of data plane and control plane）；
 - 网络控制功能（Network control functions）；
 - 可编程网络（A programmable network）。
+
+### SDN Controller
+
+- maintain network state information 维护网络状态信息
+
+- interacts with network control applications(控制应用程序进行交互) “above” via northbound API
+- interacts with network switches(与网络交换机交互) “below” via southbound API
+- implemented as distributed system for performance, scalability, fault-tolerance, robustness 作为分布式系统实现，以实现性能、可扩展性、容错性和健壮性
+
+### OpenFlow protocol
+
+Operates between controller, switch, and TCP used to exchange messages 使用 TCP 交换消息
+
+three classes of OpenFlow messages:
+
+- controller-to-switch
+- asynchronous (switch to controller)
+- symmetric (misc)
+
+### ONOS controller
+
+> [What is NFV? (redhat.com)](https://www.redhat.com/en/topics/virtualization/what-is-nfv)
+>
+> ### What is NFV?
+>
+> Network functions virtualization (网络功能虚拟化, NFV) is a way to [virtualize network services](https://www.redhat.com/en/topics/virtualization/what-is-virtualization), such as routers, firewalls, and load balancers(路由器、防火墙和负载平衡器), that have traditionally been run on proprietary hardware(专有硬件上). These services are packaged as [virtual machines (VMs)](https://www.redhat.com/en/topics/virtualization/what-is-a-virtual-machine) on commodity hardware, which allows service providers to run their network on standard servers instead of proprietary ones. It is one of the primary components of a [telco cloud](https://www.redhat.com/en/topics/cloud-computing/what-is-telco-cloud), which is reshaping the telecommunications industry. 这些服务被打包为商品硬件上的虚拟机 (VM)，这允许服务提供商在标准服务器而不是专有服务器上运行他们的网络。 它是电信云的主要组成部分之一，正在重塑电信行业。
+>
+> With NFV, you don’t need to have dedicated hardware for each network function. NFV improves scalability and agility by allowing service providers to deliver new network services and applications on demand, without requiring additional hardware resources. 使用 NFV，您无需为每个网络功能配备专用硬件。 NFV 允许服务提供商按需提供新的网络服务和应用程序，而无需额外的硬件资源，从而提高了可扩展性和敏捷性。
+
+自己搭建一个 SDN：
+
+- 上层：Floodlight / Opendaylight
+- 中间沟通：Openflow
+- 下层：[Mininet](https://github.com/mininet/mininet)
+
+> Mininet 能实现在一台机器上模拟一个完整的主机、链路和交换机网络
+
+![image-20230518162306903](./05-network-layer-2.assets/image-20230518162306903.png)
+
+## ICMP: The Internet Control Message Protocol
+
+**因特网控制报文协议（the Internet Control Message Protocol，ICMP）**，被主机和路由器用来彼此沟通网络层的信息。ICMP 最典型的用途是差错报告。
+
+::: tip TTL
+TTL 指寻找路由器的跳数，如 TTL = 1 代表只有一跳。
+:::
+
+### Traceroute and ICMP
+
+- source sends series of UDP segments to destination 源将一系列 UDP 段发送到目标
+- when datagram in *n*th set arrives to nth router 当第 n 个集中的数据报到达第 n 个路由器时
+- when ICMP message arrives, source records RTTs 当 ICMP 消息到达时，源记录 RTT
+
+> [college_assignment/计算机网络.md at main · A-BigTree/college_assignment · GitHub](https://github.com/A-BigTree/college_assignment/blob/main/learning_Notes/计算机网络.md#56-icmp因特网控制报文协议)
+>
+> ICMP 报文类型如下图所示：
+>
+> ![image-20230219000618602](./05-network-layer-2.assets/image-20230219000618602.png)
+
+## Network management and SNMP
+
+网络管理包括了硬件、软件和人类元素的设置、整合和协调，以监视、测试、轮询、配置、分析、评价和控制网络及网元资源，用合理的成本满足实时性、运营性能和服务质量的要求。Network management includes the deployment, integration, and coordination of the hardware, software, and human elements to monitor, test, poll, configure, analyze, evaluate, and control the network and element resources to meet the real-time, operational performance, and Quality of Service requirements at a reasonable cost.
+
+### Infrastructure for network management
+
+网络管理框架。网络管理的关键组件如下图所示：
+
+![image-20230518163122463](./05-network-layer-2.assets/image-20230518163122463.png)
+
+> [What Is Network Management? - Cisco](https://www.cisco.com/c/en/us/solutions/enterprise-networks/what-is-network-management.html)
+>
+> ### What Is Network Management?
+>
+> Network management refers to two related concepts. First is the process of configuring, monitoring, and managing the performance of a network. Second is the platform that IT and NetOps teams use to complete these ongoing tasks. 网络管理指的是两个相关的概念。首先是配置、监控和管理网络性能的过程。其次是 IT 和网络运作团队用来完成这些正在进行的任务的平台。
+
+- **管理服务器（managing server）**：一个应用程序，通常有人参与，并运行在网络运营中心（NOC）的集中式网络管理工作站上，执行网络管理活动的地方，控制网络管理信息的收集、处理、分析和显示；
+- **被管设备（managed device）**：被管对象（managed object）是被管设备中硬件的实际部分和用于这些硬件及软件组件的配置参数；
+- **信息管理库（Management Information Base，MIB）**：收集被管设备中每个被管对象的关联信息，信息值可供管理服务器所用；
+- **网路管理代理（network management agent）**：运行在被管设备中的一个进程，该进程与管理服务器通信，在管理服务器的命令和控制下在被管设备中采取本地动作；
+- **网络管理协议（network management protocol）**：运行在管理服务器和被管设备之间，允许管理服务器查询被管设备的状态，并经过其代理间接地在这些设备上采取行动。
+
+### SNMP protocol: message types
+
+即通讯原语。
+
+**简单网络管理协议（Simple Network Management Protocol，SNMP）**是一个应用层协议，用于在管理服务器和代表管理服务器执行的代理之间传递网络管理控制和信息报文。
+
+SNMPv2 定义了 7 种类型报文，这些报文一般称为协议数据单元（PDU），PDU 格式如下图所示：
+
+![image-20230518170106475](./05-network-layer-2.assets/image-20230518170106475.png)
+
+### SNMP protocol: message formats
+
+![image-20230518170129633](./05-network-layer-2.assets/image-20230518170129633.png)
+
+发送接收都是上半这样的格式。下半是 Trap。
+
+其中 PDU 是 Protocol Data Unit，合起来叫做 “简单网络管理协议数据单元”。
+
+## Summary
+
+- approaches to network control plane
+  - per-router control (traditional)
+  - logically centralized control (software defined networking)
+- traditional routing algorithms
+  - implementation in Internet: OSPF, BGP
+- SDN controllers
+  - implementation in practice: ODL, ONOS
+- Internet Control Message Protocol
+- network management
+
+第五章主要讲了路由表怎么做出来的，展示了网络链路上怎么指路标。最新的 “指路标” 技术是 SDN。
