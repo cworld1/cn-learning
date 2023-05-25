@@ -111,3 +111,125 @@ title: "Chapter 6: The Link Layer and LANs"
 $$
 R=remainder\frac{D\cdot2^r}{G}
 $$
+
+## Multiple access protocols
+
+多路访问链路和协议，或者说全称 Multiple Acess Links and Protocol。
+
+两种类型的网络链路：
+
+- **点对点链路（point-to-point link）**
+  - 拨号访问的 PPP
+  - 以太网交换机和主机之间的点对点链路
+- **广播链路（broadcast link）**：共享线路或媒体
+  - 传统以太网
+  - HFC 上行链路
+  - 802.11 无线局域网
+
+![image-20230525171556533](./06-link-layer-and-lans.assets/image-20230525171556533.png)
+
+::: tip 多路访问协议
+
+- 单个共享的广播型链路
+- 传输的帧在接收方可能在接收方处碰撞/冲突（collide）。
+- 分布式算法-决定节点如何使用共享信道，即：决定节点什么时候可以发送？
+
+:::
+
+在理想情况下，对于速率为 R bps 的广播信道，多路访问协议应该具有以下所希望的特性：
+
+1. 当且仅当一个节点发送数据时，该节点具有 R bps 的吞吐量；
+
+2. 当有 M 个节点发送数据时，每个节点吞吐量为 R/M bps。这不必要求 M 个节点中的每一个节点总是有 R/M 的瞬时速率，而是每个节点在一些适当定义的时间间隔内应该有 R/M 的平均传输速率；
+
+3. 协议是分散的，这就是说不会因为某主节点故障而使整个系统崩溃
+
+   （高级的说法：没有特殊节点协调发送、没有时钟和时隙的同步）
+
+4. 协议是简单的，使实现不昂贵
+
+现在主流的 3 种类型多路访问协议（介质访问控制协议，MAC）：
+
+- **信道划分协议（channel partitioning protocol）**
+  - 把信道划分成小片（时间、频率、编码）
+  - 分配片给每个节点专用
+- **随机接入协议（random access protocol）**
+  - 信道不划分，允许冲突
+  - 冲突后恢复
+- **轮流协议（taking-turns protocol）**
+  - 节点依次轮流
+  - 但是有很多数据传输的节点可以获得较长的信道使用权
+
+### 信道划分协议
+
+Channel Partitioning Protocols
+
+**时分多路复用**（time division multiple access，简称 TDMA）：
+
+- 轮流（“rounds”）使用信道（channel），信道的时间分为周期
+- 每个站点使用每周期中固定的时隙（长度=帧传输时间）传输帧
+- 时隙空闲（浪费）主要出现在站点无帧传输
+
+**频分多路复用**（frequency division multiple access，简称 FDMA）：
+
+- 信道的有效频率范围被分成一个个小的频段
+- 每个站点被分配一个固定的频段
+- 浪费主要出现在分配给站点的频段没有被使用
+
+**码分多址**（Code Division Multiple Access，简称 CDMA）
+
+- 所有站点在整个频段上同时进行传输，采用编码原理加以区分
+- 完全没有冲突（假定信号同步很好，线性叠加）
+
+### 随机接入协议
+
+> Random Access Protocols
+
+#### Slotted ALOHA
+
+Slotted 时隙，ALOHA 是夏威夷土著语，意为“你好”、“谢谢”。
+
+假设：
+
+- all frames same size
+
+- time divided into equal size slots(时间划分为大小相等的插槽) (time to transmit 1 frame)
+- nodes start to transmit only slot beginning(插槽开头)
+- nodes are synchronized（同步过）
+- if 2 or more nodes transmit in slot, all nodes detect collision(所有节点都检测到冲突)
+
+在每个节点中，时隙 ALOHA 的操作如下：
+
+- 当节点有一个新帧要发送时，它等到下一个间隙开始并在该时隙传输整个帧；
+- 如果没有碰撞，该节点成功地传输它的帧，从而不需要考虑重传该帧；
+- 如果有碰撞，该节点在时隙结束之前检测到这次碰撞，该节点以概率 p 在后续的每个时隙中重传它的帧，直到该帧被无碰撞的传输出去；
+
+![image-20230222000508480](./06-link-layer-and-lans.assets/image-20230222000508480.png)
+
+#### Slotted ALOHA: efficiency
+
+效率：当有很多节点，每个节点有很多帧要发送时，x%的时隙是成功传输帧的时隙
+
+- 假设 N 个节点，每个节点都有很多帧要发送，在每个时隙中的传输概率是 p
+- 一个节点成功传输概率是 $p(1-p)^{N-1}$
+- 任何一个节点的成功概率是 $Np(1-p)^{N-1}$
+- N 个节点的最大效率：求出使 $Np(1-p)^{N-1}$ 最大的 p\*
+- 代入 P\*得到最大 $f(p^*)=Np^*(1-p^*)^{N-1}$
+- N 为无穷大时的极限为 $1/e=0.37$
+
+即最好情况：信道利用率 37%
+
+#### Pure (unslotted) ALOHA
+
+在纯 ALOHA 中，当一帧首次到达，节点立刻将该帧完整地传输进广播信道。
+
+效率上：比时隙 ALOHA 更差了！
+
+### 载波侦听多路访问
+
+CSMA (carrier sense multiple access)
+
+两个重要的规则：
+
+1. 说话之前先听。如果其他人正在说话，等到他们说完话为止。在网络领域中，这被称为**载波侦听**（carrier sensing），即一个节点在传输前先听信道。如果来自另一个节点的帧正向信道上发送，节点则等待直到检测到一小段时间没有传输，然后开始传输
+2. 如果与他人同时开始说话，停止说话。在网络领域中，这被称为**碰撞检测**（collision detection），即当一个传输节点在传输时一直在侦听此信道。如果它检测到另一个节点正在传输干扰帧，它就停止传输，在重复“侦听-当空闲时传输”循环之前等待一段随机时间
