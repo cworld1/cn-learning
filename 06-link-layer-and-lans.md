@@ -225,11 +225,288 @@ Slotted 时隙，ALOHA 是夏威夷土著语，意为“你好”、“谢谢”
 
 效率上：比时隙 ALOHA 更差了！
 
-### 载波侦听多路访问
+#### 载波侦听多路访问
 
 CSMA (carrier sense multiple access)
 
+##### CSMA 规则
+
 两个重要的规则：
 
-1. 说话之前先听。如果其他人正在说话，等到他们说完话为止。在网络领域中，这被称为**载波侦听**（carrier sensing），即一个节点在传输前先听信道。如果来自另一个节点的帧正向信道上发送，节点则等待直到检测到一小段时间没有传输，然后开始传输
-2. 如果与他人同时开始说话，停止说话。在网络领域中，这被称为**碰撞检测**（collision detection），即当一个传输节点在传输时一直在侦听此信道。如果它检测到另一个节点正在传输干扰帧，它就停止传输，在重复“侦听-当空闲时传输”循环之前等待一段随机时间
+1. 说话之前先听。如果其他人正在说话，等到他们说完话为止。在网络领域中，这被称为**载波侦听**（carrier sensing），即一个节点在传输前先听信道。如果来自另一个节点的帧正向信道上发送，节点则等待直到检测到一小段时间没有传输，然后开始传输。
+2. 如果与他人同时开始说话，停止说话。在网络领域中，这被称为**碰撞检测**（collision detection），即当一个传输节点在传输时一直在侦听此信道。如果它检测到另一个节点正在传输干扰帧，它就停止传输，在重复“侦听-当空闲时传输”循环之前等待一段随机时间。
+
+> 这两个规则包含在**载波侦听多路访问**（Carrier Sense Multiple Access, CSMA）和**具有碰撞检测的CSMA**（CSMA with Collision Detection, CSMA/CD）协议族中。
+
+##### CSMA 冲突
+
+collisions can still occur: propagation delay(传播延迟) means two nodes may not hear each other’s transmission(无法听到彼此的传输).
+
+<img src="./06-link-layer-and-lans.assets/image-20230525205121021.png" alt="image-20230525205121021" style="zoom:67%;" />
+
+影响：entire packet transmission time waste(浪费整个数据包传输时间), and distance & propagation delay play role in in determining collision probability 距离和传播延迟在确定碰撞概率方面发挥作用
+
+##### CSMA/CD(冲突检测)
+
+CSMA 传播时延越长，载波侦听节点不能侦听到网络中另一个节点已经开始传输的机会就越大。如果一个节点开始传播后发送碰撞，其实此次传播已经失败，将剩余数据传完没有意义，即使中止才是上策，这便是具有CSMA/CD所作改进。
+
+<img src="./06-link-layer-and-lans.assets/image-20230525205131139.png" alt="image-20230525205131139" style="zoom:67%;" />
+
+算法：
+
+1. 适配器获取数据报，创建帧
+
+2. 发送前：侦听信道CS
+
+  - 闲：开始传送帧
+  - 忙：一直等到闲再发送
+
+3. 发送过程中，冲突检测CD 
+
+   - 没有冲突：成功
+   - 检测到冲突：放弃，之后尝试重发
+
+4. 发送方适配器检测到冲突， 除放弃外，还发送一个 Jam 信号，所有听到冲突的适配 
+   器也是如此
+
+   > 强化冲突：让所有站点都知道冲突
+
+5. 如果放弃，适配器进入指数退避状态。
+
+   在第m次失败后，适配器随机选择从 $\{0, 1, 2, \cdots, 2^m-1\}$ 中选择一个 K，等待K*512位时，然后转到步骤2
+
+### 轮流协议
+
+channel partitioning(信道划分) MAC protocols:
+
+- share channel efficiently and fairly at high load 共享信道在高负载时是有效和公平的
+- inefficient at low load: delay in channel acces 在低负载时效率低下
+
+random access(随机访问) MAC protocols:
+
+- efficient at low load: single node can fully utilize channel 在低负载时效率高：单个节点可以完全利用信道全部带宽
+- high load: collision overhead 高负载时：冲突开销较大，效率极低，时间很多浪费在冲突中
+
+“taking turns” protocols(轮流协议): look for best of both worlds!
+
+轮流协议包含：
+
+- **轮询协议**（polling protocol）
+- **令牌传递协议**（token-passing protocol）
+
+#### 轮询协议
+
+主节点邀请从节点依次传送；从节点一般比较“dumb”。
+
+缺点：
+
+- 轮询开销：轮询本身消耗信道带宽
+- 等待时间：每个节点需等到主节点轮询后开始传输，即使只有一个节点，也需要等到轮询 
+  一周后才能够发送
+- 单点故障：主节点失效时造成整个系统无法工作
+
+![image-20230525210937358](./06-link-layer-and-lans.assets/image-20230525210937358.png)
+
+#### 令牌传递协议
+
+控制令牌( token)循环从一个节点到下一个节点传递。
+
+> 令牌报文本质上是一种特殊的帧。 
+
+缺点:
+
+- 令牌开销：本身消耗带宽
+- 延迟：只有等到抓住令牌，才可传输
+- 单点故障 (token)（令牌丢失系统级故障，整个系统无法传输；复杂机制重新生成令牌）
+
+![image-20230525210942146](./06-link-layer-and-lans.assets/image-20230525210942146.png)
+
+### 线缆接入网络
+
+多个40Mbps 下行(广播)信道，FDM：
+
+- 下行：通过FDM分成若干信道，互联网、数字电视等 
+- 互联网信道：只有1个CMTS在其上传输
+
+多个30 Mbps上行的信道，FDM：
+
+- 多路访问：所有用户使用；接着TDM分成微时隙
+- 部分时隙：分配、竞争
+
+![image-20230525212018713](./06-link-layer-and-lans.assets/image-20230525212018713.png)
+
+### MAC 协议总结
+
+多点接入问题：对于一个共享型介质，各个节点 如何协调对它的访问和使用?
+
+- 信道划分：按时间、频率或者编码
+
+  - TDMA、FDMA、CDMA
+
+- 随机访问 (动态)
+
+  - ALOHA, S-ALOHA, CSMA, CSMA/CD
+  - 载波侦听: 在有些介质上很容易 (wire：有线介质), 但在有些 介质上比较困难 (wireless：无线)
+  - CSMA/CD ：802.3 Ethernet网中使用
+  - CSMA/CA ：802.11WLAN中使用
+
+- 依次轮流协议
+
+- 集中：由一个中心节点轮询；
+
+  分布：通过令牌控制
+
+- 蓝牙、FDDI、令牌环
+
+## LANs
+
+### Addressing, ARP
+
+32bit 的 IP 地址包含：
+
+- 网络层地址
+- 前n-1跳：用于使数据报到达目的IP子网
+- 最后一跳：到达子网中的目标节点
+
+LAN（MAC/物理/以太网）地址：
+
+- 用于使帧从一个网卡传递到与其物理连接的另一个网卡 (在同一个物理网络中)
+- 48bit MAC地址固化在适配器的ROM，有时也可以通过软件设定
+- 理论上全球任何2个网卡的MAC地址都不相同
+
+LAN 地址形如：`1A-2F-BB-76-09-AD`（16进制表示，每一位代表4个bits）
+
+#### LAN 地址和ARP
+
+局域网上每个适配器都有一个唯一的LAN地址。
+
+![image-20230601160143849](./06-link-layer-and-lans.assets/image-20230601160143849.png)
+
+注：
+
+- MAC地址由IEEE管理和分配
+- 制造商购入MAC地址空间（保证你的 MAC 是唯一的，全球都没有重复）
+
+类比：MAC地址就好比社会安全号，IP地址就好比通讯地址。
+
+但由于MAC平面地址，并且是固定的，所以支持移动。
+
+#### ARP: Address Resolution Protocol
+
+::: tip 已知B的IP地址，如何确定B的MAC地址？
+
+在LAN上的每个IP节点都有一个ARP表。
+
+ARP表包括一些 LAN节点IP/MAC地址的映射：`< IP address; MAC address; TTL>`。其中TTL时间是指地址映射失效的时间。典型是20min。
+
+:::
+
+> [How Address Resolution Protocol (ARP) works? - GeeksforGeeks](https://www.geeksforgeeks.org/how-address-resolution-protocol-arp-works/)
+>
+> The acronym ARP stands for **Address Resolution Protocol** which is one of the most important protocols of the Network layer in the OSI model. It is responsible to find the hardware address of a host from a known IP address. There are three basic ARP terms. ARP 代表地址解析协议，它是 OSI 模型中网络层最重要的协议之一。它负责从已知 IP 地址中查找主机的硬件地址。
+>
+> ![Address Resolution Protocol](./06-link-layer-and-lans.assets/ARP-in-Network-Layer.jpg)
+
+> [ARP(地址解析协议)_傲娇回忆杀的博客-CSDN博客](https://blog.csdn.net/weixin_62594100/article/details/123992695)
+>
+> 我们以以太网的工作环境作为背景来探讨这一协议（串行链路由于是点到点链路，故而不需要ARP）。在以太网的工作环境中，当主机需要向一个IP地址发送数据时，它需要将目标的物理地址（也就是MAC地址，也有文献称其为硬件地址）写在数据帧的目的MAC地址字段位置上，而这一动作的前提是，网络层已经知道了这一地址并且将其与逻辑目的地址建立了一个映射关系。这就好比在手机上存了一个电话号码并备注上了一个联系人一样，当需要打电话时，只需要查找该联系人的姓名即可，手机会帮我们自动选择他的电话号码拨过去。
+>
+> 当我们并不知道一台主机的IP地址与物理地址的映射关系的时候，就需要用到ARP。
+>
+> ### ARP 分类：普通 ARP
+>
+> 我们用一个简单的比喻来形容ARP的工作过程。当你只知道你跟张三是同班同学却不知道他的具体座位时，你站起来大喊了一声：“我是王二，谁是张三？”于是张三说：”我是张三。“这样，你就知道了张三的具体位置，同时张三也知道了你的位置和姓名。
+>
+> 如下图所示为一个ARP请求报文的示例。
+>
+> ![img](./06-link-layer-and-lans.assets/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBA5YKy5aiH5Zue5b-G5p2A,size_20,color_FFFFFF,t_70,g_se,x_16.png)
+>
+> 当一台主机需要访问一个与自己在同一个网络的IP地址但不知道目的主机的物理地址时，它就会发送一个ARP请求报文。由于我们并不知道目标物理地址是什么，该报文的目标物理地址（即MAC地址）在数据帧的头部用二层广播地址FFFF.FFFF.FFFF来填充。
+>
+> 一个二层目的地址为广播地址的数据帧是会被发送给广播域内所有的成员的，如果网络规划正确，那么这其中一定会包含真正的接收者。当真正的接收者收到该数据帧之后，会转交给自身的ARP程序，经过比对，发现其中的目的IP地址正是其所拥有的，就会对发送者做出回应，在回应报文中会将自身的物理地址写在发送者MAC地址的位置。
+>
+> 一次美妙的陌生人之间的互相介绍就这样完成了。看起来是不是很简单呢？
+>
+> ### ARP 分类：代理 ARP
+>
+> 在一般情况下，只能为主机分配一个默认网关。如果需要互通的主机处在相同的网段却不在同一物理网络，并且连接主机的网关设备具有不同的网关地址，在这种场景中，如果发生网络故障，我们该如何防止业务中断呢？在这种场景中，需要代理ARP，其工作过程如下图所示。
+>
+> ![img](./06-link-layer-and-lans.assets/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBA5YKy5aiH5Zue5b-G5p2A,size_20,color_FFFFFF,t_70,g_se,x_16-1685607549098-3.png)
+>
+> 可以看出，实际上，代理ARP只是一种服务，它并不是一种协议。并且，服务提供者对用户进行了“欺骗”，只是将自身的MAC地址回应给了用户，以此来达到代替用户转发数据的目的。
+>
+> ### ARP 报文格式
+>
+> ARP 协议包（ARP 报文）主要分为 ARP 请求包和 ARP 响应包。ARP 协议是通过报文进行工作的，ARP 报文格式如图所示。
+>
+> ![51a0c57b9c57c480a459ed7df13cede5](./06-link-layer-and-lans.assets/51a0c57b9c57c480a459ed7df13cede5.jpg)
+>
+> ARP 报文总长度为 28 字节，MAC 地址长度为 6 字节，IP 地址长度为 4 字节。
+>
+> 其中，每个字段的含义如下。
+>
+> - 硬件类型：指明了发送方想知道的硬件接口类型，以太网的值为 1。
+> - 协议类型：表示要映射的协议地址类型。它的值为 0x0800，表示 IP 地址。
+> - 硬件地址长度和协议长度：分别指出硬件地址和协议的长度，以字节为单位。对于以太网上 IP 地址的ARP请求或应答来说，它们的值分别为 6 和 4。
+> - 操作类型：用来表示这个报文的类型，ARP 请求为 1，ARP 响应为 2，RARP 请求为 3，RARP 响应为 4。
+> - 发送方 MAC 地址：发送方设备的硬件地址。
+> - 发送方 IP 地址：发送方设备的 IP 地址。
+> - 目标 MAC 地址：接收方设备的硬件地址。
+> - 目标 IP 地址：接收方设备的IP地址。
+
+#### ARP协议：在同一个LAN （网络）
+
+流程：
+
+- 首先，A要发送**帧**给B（其中B的IP地址已知)， 但B的MAC地址并不在A的ARP表中。
+
+  ::: tip
+  发送帧只能在同一个网关下进行，不能穿透路由器前往别的网络。
+  :::
+
+  所以，A广播了包含B的IP地址的 ARP查询包：Dest MAC address = FF-FF-FF-FF-FF-FF
+
+  LAN 上的所有节点都会收到该查询包。
+
+- B接收到ARP包，回复A自己的MAC地址（帧发送给A、用A的MAC地址，即单播）。
+
+- A收到帧之后，在自己的ARP表中，缓存 IP-to-MAC地址映射关系 ，直到信息超时。
+
+  ::: tip
+
+  - 软状态：靠定期刷新维持的系统状态
+  - 定期刷新周期之间维护的状态信息可能和原有系统不一致
+
+  :::
+
+ARP是即插即用的：
+
+- 节点自己创建ARP的表项
+- 无需网络管理员的干预
+
+#### ARP协议：路由到其他LAN
+
+流程：
+
+- A创建**数据报**，源IP地址：A；目标IP地址：B 封装一层
+
+  ::: tip
+
+  为了跨网络，只能使用数据报格式。
+
+  :::
+
+- 1
+
+### Ethernet
+
+### Switches
+
+### VLANS
+
+
+
+
+
+
+
