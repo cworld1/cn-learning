@@ -42,7 +42,7 @@ _goal:_ determine(确定) “good” paths (equivalently, routes 等效于路由
 
 - $N = \text{set of routers} = { u, v, w, x, y, z }$
 - $E = \text{set of links} = \{ (u,v), (u,x), (v,x), (v,w), (x,w), (x,y), (w,y), (w,z), (y,z) \}$
-- $c(x,x’) = \text{cost of link}\ (x,x’)$
+- $c(x,x') = \text{cost of link}\ (x,x')$
 
   e.g., $c(w,z) = 5$
 
