@@ -17,6 +17,7 @@ const navConfig: NavbarConfig = [
       "/04-network-layer",
       "/05-network-layer-2",
       "/06-link-layer-and-lans",
+      "/07-security"
     ],
   },
   {
