@@ -660,9 +660,9 @@ IEEE 的一些常见标准：
 ```python
 if entry found for destination # 有目标地址
 then{
-	if dest on segment from which frame arrived
-	then drop the frame # 过滤掉
-	else forward the frame on interface indicated # 转发对应的端口
+    if dest on segment from which frame arrived
+    then drop the frame # 过滤掉
+    else forward the frame on interface indicated # 转发对应的端口
 }
 else flood # 泛洪：除了帧到达的网段，向所有网络接口
 ```
@@ -695,3 +695,105 @@ else flood # 泛洪：除了帧到达的网段，向所有网络接口
 - 流量隔离
 - 动态成员：成员可以在 VLANs 之间动态分配
 - 在 VLANs 间转发：通过路由器进行转发 (就像他们通过各自的交换机相联一样）
+
+## Link virtualization: MPLS
+
+Link virtualization 即链路虚拟化。
+
+MPLS 概念：建立基于标签的转发表-信令协议：支持逐跳和显式路由：路由信息传播，路由计算(基于 Qos，基于策略的)，标签分发
+
+MPLS 网络按照标签 label 进行分组的转发（纯 IP 网络是按照 IP 地址对分组进行转发的）。
+
+### 标签交换过程
+
+- 入口路由器：LER 对进入的分组按照 EFC 的定义打上标签
+- 在 MPLS 网络中（虚拟成了链路）对分组按照标签进行交换
+- 到了出口路由器，再将标签摘除
+- 支持 MPLS 的路由器组构成的网络，从 IP 网络的角度来看虚拟
+  成了链路
+
+### MPLS vs IP 路径
+
+![image-20230608161631753](./06-link-layer-and-lans.assets/image-20230608161631753.png)
+
+- IP 路由：到达目标的路径仅仅取决于目标地址
+- MPLS 路由：到达目标的路由，可以基于源和目标地址
+
+> MPLS 路由特有的快速重新路由：在链路失效时，采用预先计算好的路径
+
+## Data center networking
+
+数据中心网络：一般是数万-数十万台主机构成 DC 网络，密集耦合、距离临近。
+
+挑战：
+
+- 多种应用，每一种都服务海量的客户端
+- 管理/负载均衡，避免处理 、网络和数据的瓶颈
+
+### 负载均衡器：应用层路由
+
+- 接受外部的客户端请求
+
+- 将请求导入到数据中心内部
+- 返回结果给外部客户端（对于客户端隐藏数据中心的内部结构）
+
+### 互联
+
+在交换机之间，机器阵列之间有丰富的互连措施：
+
+- 在阵列之间增加吞吐 (多个可能的路由路径)
+- 通过冗余度增加可靠性
+
+## A day in the life of web request
+
+### 回顾：页面请求的历程
+
+Top-down 的协议栈旅程结束了！
+
+我们主要学了应用层、运输层、网络层和链路层。
+
+### A day in the life… connecting to the Internet
+
+- 笔记本需要一个 IP 地址，第一跳路由器的 IP 地址，DNS 的地址：采用 DHCP
+
+- DHCP 请求被封装在 UDP 中，封装在 IP，封装在 802.3 以太网帧中
+- 以太网的帧在 LAN 上广播（dest: FFFFFFFFFFFF），被运行中的 DHCP 服务器接收到
+- 以太网帧中解封装 IP 分组，解封装 UDP，解封装 DHCP
+- DHCP 服务器生成 DHCPACK 包括客户端 IP 地址，第一跳路由器 P 地址和 DNS 名字服务器地址
+- 在 DHCP 服务器封装，帧通过 LAN 转发(交换机学习)在客户端段解封装
+- 客户端接收 DHCP ACK 应答
+
+至此，客户端有了 IP 地址，知道了 DNS 域名服务器的名字和 IP 地址、第一跳路由器的 IP 地址
+
+### A day in the life… ARP (before DNS, before HTTP)
+
+- 在发送 HTTP request 请求之前, 需要知道www.google.com的IP地址：DNS
+
+- DNS 查询被创建，封装在 UDP 段中 ，封装在 IP 数据报中，封装在以太网的帧中. 将帧传递给路由器 ，但是需要知道路由器的接口： MAC 地址：ARP
+- ARP 查询广播，被路由器接收， 路由器用 ARP 应答，给出其 IP 地 址某个端口的 MAC 地址
+
+至此，客户端现在知道第一跳路由器 MAC 地址，所以可以发送 DNS 查询帧了
+
+### A day in the life… using DNS
+
+- 包含了 DNS 查询的 IP 数据报通过 LAN 交换机转发，从客户端到第一跳路由器
+
+- IP 数据报被转发，从校园到达 comcast 网络，路由（路由表被 RIP，OSPF，IS-IS 和/或 BGP 协 议创建）到 DNS 服务器
+- 被 DNS 服务器解封装
+- DNS 服务器回复给客户端：www.google.com 的 IP 地址
+
+### A day in the life…TCP connection carrying HTTP
+
+- 为了发送 HTTP 请求，客户端打开到达 web 服务器的 TCP socket
+- TCP SYN 段（3 次握手的第 1 次握手）域间路由到 web 服务器
+- web 服务器用 TCP SYNACK 应答（3 次握手的第 2 次握手）
+
+至此，TCP 连接建立了！
+
+### A day in the life… HTTP request/reply
+
+- HTTP 请求发送到 TCPsocket 中
+
+- IP 数据报包含 HTTP 请求，最终路由到 www.google.com
+- web 服务器用 HTTP 应答回应(包括请求的页面)
+- IP 数据报包含 HTTP 应答最后被路由到客户端
