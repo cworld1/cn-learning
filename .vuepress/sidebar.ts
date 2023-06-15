@@ -33,6 +33,12 @@ const navConfig: NavbarConfig = [
       "/experiment/07-应用服务器的配置",
     ],
   },
+  {
+    text: "Others",
+    children: [
+      "/last",
+    ],
+  },
 ];
 
 export default navConfig;
