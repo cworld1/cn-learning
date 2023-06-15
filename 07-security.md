@@ -399,8 +399,8 @@ SSL: Secure Sockets Layer
 >
 > 有几种不同[类型的 SSL 证书](https://www.cloudflare.com/learning/ssl/types-of-ssl-certificates/)。一个证书可以应用于一个或多个网站，具体取决于类型：
 >
-> - **单域：**单域 SSL 证书仅适用于一个域（“域”是网站的名称，例如 www.cloudflare.com）。
-> - **通配符：**与单域证书一样，通配符 SSL 证书仅适用于一个域。但是，它也包括该域的子域。例如，通配符证书可以覆盖 www.cloudflare.com、blog.cloudflare.com，和 developers.cloudflare.com，而单域证书只能覆盖第一个。
+> - **单域：**单域 SSL 证书仅适用于一个域（“域”是网站的名称，例如 [www.cloudflare.com](https://www.cloudflare.com)）。
+> - **通配符：**与单域证书一样，通配符 SSL 证书仅适用于一个域。但是，它也包括该域的子域。例如，通配符证书可以覆盖 [www.cloudflare.com](https://www.cloudflare.com)、blog.cloudflare.com，和 developers.cloudflare.com，而单域证书只能覆盖第一个。
 > - **多域：**顾名思义，多域 SSL 证书可以应用于多个不相关的域。
 >
 > SSL 证书还具有不同的验证级别。验证级别就像背景检查一样，并且级别会根据检查的彻底性而变化。

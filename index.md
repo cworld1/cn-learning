@@ -8,6 +8,9 @@ actions:
   - text: Introduction
     link: /intro/
     type: secondary
+  - text: PDF
+    link: /cn-learning.pdf
+    type: secondary
 features:
   - title: Simplicity First
     details: 从最简单最基础的开始。
