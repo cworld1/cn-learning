@@ -107,11 +107,121 @@ AES 加密使用多轮加密算法，每轮包括四个步骤：SubBytes、Shift
 
 ### 公开密钥密码学
 
-是与堆成密钥密码学完全不同的方法 [Diffie-Hellman76, RSA78]
+对称加密模式有一个最大弱点：甲方必须把加密规则告诉乙方，否则无法解密。保存和传递密钥，就成了最头疼的问题。公开密钥密码学就是与对称密钥密码学完全不同的方法 [Diffie-Hellman76, RSA78]。
 
 这种密码学一般都有这样的特性：
 
 - 发送方和接收方无需共享密钥
-
 - 一个实体的公钥公诸于众
 - 私钥只有他自己知道
+
+> [RSA 算法原理（一） - 阮一峰的网络日志 (ruanyifeng.com)](https://ruanyifeng.com/blog/2013/06/rsa_algorithm_part_one.html)
+>
+> 1976 年，两位美国计算机学家 Whitfield Diffie 和 Martin Hellman，提出了一种崭新构思，可以在不直接传递密钥的情况下，完成解密。这被称为["Diffie-Hellman 密钥交换算法"](https://en.wikipedia.org/wiki/Diffie–Hellman_key_exchange)。这个算法启发了其他科学家。人们认识到，加密和解密可以使用不同的规则，只要这两种规则之间存在某种对应关系即可，这样就避免了直接传递密钥。
+>
+> 这种新的加密模式被称为"非对称加密算法"。
+>
+> 1. 乙方生成两把密钥（公钥和私钥）。公钥是公开的，任何人都可以获得，私钥则是保密的。
+> 2. 甲方获取乙方的公钥，然后用它对信息加密。
+> 3. 乙方得到加密后的信息，用私钥解密。
+>
+> 如果公钥加密的信息只有私钥解得开，那么只要私钥不泄漏，通信就是安全的。
+>
+> ![img](./07-security.assets/bg2013062702.jpg)
+>
+> 1977 年，三位数学家 Rivest、Shamir 和 Adleman 设计了一种算法，可以实现非对称加密。这种算法用他们三个人的名字命名，叫做[RSA 算法](https://zh.wikipedia.org/zh-cn/RSA加密算法)。从那时直到现在，RSA 算法一直是最广为使用的"非对称加密算法"。毫不夸张地说，只要有计算机网络的地方，就有 RSA 算法。
+
+#### RSA
+
+> [公开密钥加密之 RSA 算法【概念+计算+代码实现】\_rsa 算法代码\_MIKE 笔记的博客-CSDN 博客](https://blog.csdn.net/m0_51607907/article/details/123884953)
+>
+> ### 密钥计算方法
+>
+> 1. 选择两个大素数 p 和 q(典型值为 1024 位)
+> 2. 计算 `n=p×q` 和 `z=(p-1)×(q-1)`（其中 n 表示欧拉函数）
+> 3. 选择一个与 z 互质的数，令其为 d
+> 4. 找到一个 e 使满足 `exd= 1 (mod z)`
+> 5. 公开密钥为 `(e，m)`，私有密钥为 `(d，m)`
+>
+> ### 加密方法
+>
+> 1. 将明文看成比特串，将明文划分成 k 位的块 P 即可，这里 k 是满足 $2*k<n$ 的最大整数。
+> 2. 对每个数据块 P，计算 $C= P^e(mod\ n)$，而 C 即为 P 的密文。
+>
+> ### 解密方法
+>
+> 对每个密文块 C，计算 $P=C^d(mod\ n)$，P 即为明文。
+>
+> ### RSA 算法流程图
+>
+> ![RSA算法流程图](./07-security.assets/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBATUlLReWwj-WKqeaJiw==,size_20,color_FFFFFF,t_70,g_se,x_16#pic_center.png)
+>
+> 代码实现：[2️⃣ 代码实现 (csdn.net)](https://blog.csdn.net/m0_51607907/article/details/123884953#t14) 有时间可以看看学一学。
+
+RSA 的一个重要的特性：
+
+![image-20230608182124110](./07-security.assets/image-20230608182124110.png)
+
+Exponentiation in RSA is computationally intensive. RSA 中的求幂运算是计算密集型的。
+
+## Message integrity, authentication
+
+### Authentication
+
+即信息完整性与认证
+
+- Protocol ap1.0：直接发送对方信息
+- Protocol ap2.0：对方信息中加入了 IP 地址
+- Protocol ap3.0：对方信息中加入了自己的密码证明
+- Protocol ap3.1：对方信息中加入了自己的加密之后的密码来证明
+
+> 重放攻击：将之前的操作复现一遍，从而欺骗对方。
+
+- Protocol ap4.0：为了证明 Alice 的活跃性, Bob 发送给 Alice 一个 nonce, R。Alice 必须返回加密之后的 R，使用双方约定好的 key。
+
+  > Nonce: 一生只用一次（_once-in-a-lifetime_）的整数 R
+
+  问题是需要双方共享一个对称式的密钥。这个协议的缺点是需要共享秘钥！
+
+- Protocol ap5.0：使用 nonce，公开密钥加密技术
+
+  （安全漏洞 —— 中间攻击）仍然存在问题：
+
+  - Trudy 用自己的私钥加密 R，传给 Bob 公钥
+  - Trudy 截获 Alice 的信息和公钥，用 Alice 的 公钥解密她的私钥
+
+  至此 Bob 与 Alice 之间的信息全被 Trudy 截获
+
+  ![image-20230615162125059](./07-security.assets/image-20230615162125059.png)
+
+### Message integrity
+
+#### Digital signatures
+
+即数字签名。我们类比于手写签名。
+
+特性：
+
+- 可验证性 _verifiable_
+- 不可伪造性/不可抵赖性 _nonforgeable_
+
+其中重点：
+
+- 谁签署：接收方（Alice）可以向他人证明是 Bob，而不是其他人签署了这个文件（包括 Alice）
+- 签署了什么：这份文件，而不是其它文件
+
+简单的对ｍ的数字签名：Bob 使用他自己的私钥对 m 进行了签署 ，创建数字签名 $K^-_B (m)$
+
+![image-20230615163120828](./07-security.assets/image-20230615163120828.png)
+
+但这里要注意的是，对长报文进行公开密钥加密算法的实施需要耗费大量的时间。所以我们约定了一个指定的长度文本即可。这就要用到报文摘要（Message digests）。
+
+对 m 使用散列函数 H，获得固定长度的报文摘要 H(m)。
+
+![image-20230615163515880](./07-security.assets/image-20230615163515880.png)
+
+散列函数的特性：
+
+- 多对 1
+- 结果固定长度
+- 给定一个报文摘要 x，反向计算出原报文在计算上是不可行的 $x = H(m)$
