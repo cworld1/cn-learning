@@ -54,7 +54,9 @@ jobs:
       
       # Build PDF
       - name: Build PDF
-        run: pnpm run export
+        run: |
+          sudo apt install -y fonts-wqy-microhei fonts-wqy-zenhei
+          pnpm run export
 
       # Docs: https://github.com/peaceiris/actions-gh-pages#%EF%B8%8F-docusaurus
       - name: Deploy to GitHub Pages
