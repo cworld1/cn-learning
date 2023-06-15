@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vuepress dev",
     "build": "vuepress build",
-    "export": "press-export-pdf export dist/cn-learning.pdf"
+    "export": "press-export-pdf export / --outDir dist"
   },
   "keywords": [],
   "author": "CWorld",
