@@ -154,7 +154,7 @@ AES 加密使用多轮加密算法，每轮包括四个步骤：SubBytes、Shift
 >
 > ### RSA 算法流程图
 >
-> ![RSA算法流程图](./07-security.assets/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBATUlLReWwj-WKqeaJiw==,size_20,color_FFFFFF,t_70,g_se,x_16#pic_center.png)
+> ![RSA算法流程图](./07-security.assets/rsa.png)
 >
 > 代码实现：[2️⃣ 代码实现 (csdn.net)](https://blog.csdn.net/m0_51607907/article/details/123884953#t14) 有时间可以看看学一学。
 
@@ -203,16 +203,21 @@ Exponentiation in RSA is computationally intensive. RSA 中的求幂运算是计
 特性：
 
 - 可验证性 _verifiable_
-- 不可伪造性/不可抵赖性 _nonforgeable_
+- 不可伪造性 _nonforgeable_
+- 不可抵赖性 _non-repudiation_
 
 其中重点：
 
 - 谁签署：接收方（Alice）可以向他人证明是 Bob，而不是其他人签署了这个文件（包括 Alice）
 - 签署了什么：这份文件，而不是其它文件
 
-简单的对ｍ的数字签名：Bob 使用他自己的私钥对 m 进行了签署 ，创建数字签名 $K^-_B (m)$
+过程：
 
-![image-20230615163120828](./07-security.assets/image-20230615163120828.png)
+- 简单的对ｍ的数  字签名：Bob 使用他自己的私钥对 m 进行了签署 ，创建数字签名 $K^-_B (m)$
+
+  ![image-20230615163120828](./07-security.assets/image-20230615163120828.png)
+
+::: tip Message digests
 
 但这里要注意的是，对长报文进行公开密钥加密算法的实施需要耗费大量的时间。所以我们约定了一个指定的长度文本即可。这就要用到报文摘要（Message digests）。
 
@@ -225,3 +230,11 @@ Exponentiation in RSA is computationally intensive. RSA 中的求幂运算是计
 - 多对 1
 - 结果固定长度
 - 给定一个报文摘要 x，反向计算出原报文在计算上是不可行的 $x = H(m)$
+
+:::
+
+- 假设 Alice 收到报文 m，以及数字签名 $K^-_B (m)$
+
+- Alice 使用 Bob 的公钥 $K_B$ 对 $K^-_B (m)$ 进行验证， 判断 $K^+_B(K^-_B(m)) = m$是否成立。
+
+  如果成立，那么签署这个文件的人一定拥有 Bob 的私钥。
