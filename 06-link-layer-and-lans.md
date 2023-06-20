@@ -44,7 +44,7 @@ title: "Chapter 6: The Link Layer and LANs"
 - 成帧（Framing）、链路接入（Link access）：
   - 将数据报封装在帧中，加上帧头、帧尾部
   - 如果采用的是共享性介质，信道接入获得信道访问权；
-  - **媒体访问控制（Medium Access Control，MAC）**协议规定了帧在链路上传输规则；
+  - **媒体访问控制（Medium Access Control，MAC）** 协议规定了帧在链路上传输规则；
 - 可靠交付（Reliable deliver）、差错检测和纠正（Error detection and correction）：
   - 第三章传输层的可靠数据传输
   - 在低出错率的链路上（光纤和双绞线电缆）很少使用
@@ -192,7 +192,6 @@ Slotted 时隙，ALOHA 是夏威夷土著语，意为“你好”、“谢谢”
 假设：
 
 - all frames same size
-
 - time divided into equal size slots(时间划分为大小相等的插槽) (time to transmit 1 frame)
 - nodes start to transmit only slot beginning(插槽开头)
 - nodes are synchronized（同步过）
@@ -248,7 +247,7 @@ collisions can still occur: propagation delay(传播延迟) means two nodes may 
 
 ##### CSMA/CD(冲突检测)
 
-CSMA 传播时延越长，载波侦听节点不能侦听到网络中另一个节点已经开始传输的机会就越大。如果一个节点开始传播后发送碰撞，其实此次传播已经失败，将剩余数据传完没有意义，即使中止才是上策，这便是具有 CSMA/CD 所作改进。
+CSMA 传播时延越长，载波侦听节点不能侦听到网络中另一个节点已经开始传输的机会就越大。如果一个节点开始传播后发送碰撞，其实此次传播已经失败，将剩余数据传完没有意义，及时中止才是上策，这便是具有 CSMA/CD 所作改进。
 
 ![image-20230525210937358](./06-link-layer-and-lans.assets/image-20230525205131139.png)
 
