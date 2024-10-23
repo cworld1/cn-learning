@@ -16,7 +16,7 @@ import vuepressPluginAnchorRight from "vuepress-plugin-anchor-right";
 
 export default defineUserConfig({
   // set site base to default value
-  base: "/",
+  base: "/cn-learning/",
 
   // extra tags in `<head>`
   head: [
